@@ -1,0 +1,7 @@
+{
+  "name": "Neighborhood Map",
+  "dependencies": {
+    "knockout": "~3.3.0",
+    "bootstrap": "~3.3.5"
+  }
+}
