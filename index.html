@@ -6,28 +6,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Neighborhood Map</title>
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
             <div class="main-logo col-md-2 center-block">
-				<i class="fa fa-map-o fa-4x"></i>
-				<i class="fa fa-location-arrow fa-4x"></i>
+                <i class="fa fa-map-o fa-4x"></i>
+                <i class="fa fa-location-arrow fa-4x"></i>
             </div>
             <div class="col-md-10">
-            	<h1 class="main-title text-center">Neighborhood Map Project</h1>
+                <h1 class="main-title text-center">Neighborhood Map Project</h1>
             </div>
         </div>
         <div class="row">
-        	<div class="col-md-12>" id="map">
-
+            <div class="col-md-12">
+                <form>
+                    <input type="text" class="form-control" placeholder="Search..." required>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+        	<div class="col-md-6 placeholder">
+				<img src="http://placehold.it/500x600" alt="">
         	</div>
-
+            <div class="col-md-6">
+                <div id="map"></div>
+            </div>
         </div>
     </div>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
