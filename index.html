@@ -33,9 +33,11 @@
             </div>
         </div>
         <div class="row">
-        	<div class="col-md-6 placeholder">
-				<img src="http://placehold.it/500x600" alt="">
-        	</div>
+            <div class="col-md-6 placeholder">
+                <ul data-bind="foreach: items">
+                    <li data-bind="text: $data"></li>
+                </ul>
+            </div>
             <div class="col-md-6">
                 <div id="map"></div>
             </div>
@@ -44,6 +46,7 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/knockout/dist/knockout.js"></script>
+    <!-- TODO: Figure out a way to hide the API Key -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBImQl6ZfmPCrStxNisuwiOJUtg1VpAQws&callback=initMap"></script>
     <script src="js/app.js" charset="utf-8" async defer></script>
 </body>
