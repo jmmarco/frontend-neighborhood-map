@@ -21,3 +21,13 @@ body {
 	margin-left: 40px;
 
 }
+
+/* Add hover effect for list - UI enhancement */
+
+ul {
+	background-color: #fff
+}
+
+li: hover {
+	background-color: #2F4F4F
+}
