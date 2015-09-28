@@ -1,5 +1,11 @@
+/* TODO: Organize CSS */
+
 body {
 	font-family: sans-serif;
+}
+
+form {
+	margin-bottom: 10px;
 }
 
 .main-title {
@@ -15,19 +21,29 @@ body {
 }
 
 #map {
-	height: 600px;
-	margin-top: 10px;
-	width: 90%;
+	height: 500px;
 	margin-left: 40px;
 
 }
 
-/* Add hover effect for list - UI enhancement */
+/* Custom media query for smaller devices */
 
-ul {
-	background-color: #fff
-}
+@media (max-width: 360px) {
 
-li: hover {
-	background-color: #2F4F4F
+	#map {
+
+	}
+
+	.main-title {
+		font-size: 1em;
+	}
+
+	.main-logo {
+		font-size: 0.5em;
+		padding-bottom: 5px;
+	}
+
+	ul {
+		padding-left: 20px;
+	}
 }
