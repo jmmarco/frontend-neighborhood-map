@@ -2,10 +2,12 @@
 
 body {
 	font-family: sans-serif;
+	margin: 20px;
 }
 
 form {
-	margin-bottom: 10px;
+	padding-right: 0;
+	padding-left: 0;
 }
 
 .main-title {
@@ -23,16 +25,11 @@ form {
 #map {
 	height: 500px;
 	margin-left: 40px;
-
 }
 
 /* Custom media query for smaller devices */
 
 @media (max-width: 360px) {
-
-	#map {
-
-	}
 
 	.main-title {
 		font-size: 1em;
