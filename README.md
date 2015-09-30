@@ -4,3 +4,8 @@ Frameworks:
  - KnockoutJS
 API:
 - None yet
+
+
+### Credits
+
+Live Search with Knockout.js - http://opensoul.org/2011/06/23/live-search-with-knockoutjs/
