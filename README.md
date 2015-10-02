@@ -4,7 +4,7 @@ This is an application that helps you find local business and places in your loc
 - Homepage:
 - Source:
 
-Quickstart
+## Quickstart
 
 
 - Clone the repository - `git clone https://github.com/jmmarco/frontend-neighborhood-map.git`
@@ -14,7 +14,7 @@ Quickstart
 
 
 
-Dependencies:
+### Dependencies:
 
  - KnockoutJS
  - Google Maps API
