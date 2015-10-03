@@ -23,8 +23,12 @@ form {
 }
 
 #map {
-	height: 500px;
-	margin-left: 40px;
+	height: 600px;
+	width: auto;
+}
+
+a {
+	color: #00b0ff;
 }
 
 /* Custom media query for smaller devices */
