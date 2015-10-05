@@ -14,7 +14,7 @@ This is an application that helps you find local business and places in your loc
 
 
 
-### Dependencies:
+### gitDependencies:
 
  - KnockoutJS
  - Google Maps API

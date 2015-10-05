@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+	<h1>Test Page</h1>
+	<h4 data-bind="text: firstName"></h4>
+	<h5 data-bind="text: fullName"></h5>
+	<h2>Places</h2>
+	<ul data-bind="foreach: locations">
+		<li data-bind="text: name"></li>
+	</ul>
+	<hr>
+	<div>First name: <span data-bind="text: firstName"></span></div>
+	<div>Last name: <span data-bind="text: lastName"></span></div>
+	<div><h3>Hello, </h3><input data-bind="textInput: fullName"></div>
+
+<script src="bower_components/knockout/dist/knockout.js"></script>
+<script src="js/test.js" charset="utf-8" async defer></script>
+</body>
+
+</html>

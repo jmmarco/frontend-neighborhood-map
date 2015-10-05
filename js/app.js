@@ -38,7 +38,12 @@ ko.applyBindings(new viewModel());
 var initMap = function() {
 	var geocoder;
 	var map;
-	var address = "New York";
+	var address;
+	for (var i in locations) {
+		address = locations[i].address;
+		console.log(address); // Check console for results
+	}
+
 	geocoder = new google.maps.Geocoder();
 	var latlng = new google.maps.LatLng(40.7033127, -73.979681);
 	var myOptions = {
@@ -53,13 +58,15 @@ var initMap = function() {
 
 	map = new google.maps.Map(document.getElementById('map'), myOptions);
 	if (geocoder) {
+		for (var i in locations) {
+		address = locations[i].address;
 		geocoder.geocode( { 'address': address}, function(results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
 				if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
 					map.setCenter(results[0].geometry.location);
 
 					var infowindow = new google.maps.InfoWindow({
-						content: '<b>' + address + '</b>',
+						content: '<h5>' + address + '</h5>',
 						size: new google.maps.Size(150, 50)
 					});
 
@@ -80,6 +87,7 @@ var initMap = function() {
 				alert("Geocode was not successful for the following: " + status);
 			}
 		});
+		}
 	}
 };
 
