@@ -42,10 +42,10 @@ var initMap = function() {
 	geocoder = new google.maps.Geocoder();
 	var latlng = new google.maps.LatLng(40.7033127, -73.979681);
 	var myOptions = {
-		zoom: 7,
+		zoom: 12,
 		center: latlng,
 		mapTypeControl: true,
-		mapTypeControlOptions: {style: google.maps.mapTypeControlStyle.DROPDOWN_MENU},
+		mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
 		navigationControl: true,
 		mapTypeID: google.maps.MapTypeId.ROADMAP
 	};
@@ -83,19 +83,4 @@ var initMap = function() {
 	}
 };
 
-
-
-
-	var marker = new google.maps.Marker({
-		position: map.center,
-		map: map,
-		animation: google.maps.Animation.DROP
-	});
-	console.log(map.center);
-
-	google.maps.event.addListener(map, 'bounds_changed', function() {
-		var bounds = map.getBounds();
-	});
-
 // I called initMap from the <script> tag in index.html, should I call it from within the viewModel instead?
-};
