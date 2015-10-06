@@ -38,7 +38,9 @@
         <div class="row">
             <div class="col-xs-2 col-md-2">
                 <ul class="list-group" data-bind="foreach: locations">
-                    <li class="list-group-item" data-bind="text: name"></li>
+                    <li class="list-group-item" data-bind="click: $parent.clickMarker"></li>
+                    <h5 class="" data-bind="text: name">
+                    <h5 class="" data-bind="text: address">
                 </ul>
             </div>
             <div class="col-xs-10 col-md-10">
@@ -50,7 +52,9 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/knockout/dist/knockout.js"></script>
     <!-- TODO: Figure out a way to hide the API Key -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBImQl6ZfmPCrStxNisuwiOJUtg1VpAQws&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBImQl6ZfmPCrStxNisuwiOJUtg1VpAQws&callback=initialize"></script>
+    <!-- TODO: Ask why is using this equivalent, and doesn't require an API Key. Taken from P2: Online Resume -->
+    <!-- <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script> -->
     <script src="js/app.js" charset="utf-8" async defer></script>
 </body>
 
