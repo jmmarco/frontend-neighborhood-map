@@ -2,7 +2,9 @@
 
 body {
 	font-family: sans-serif;
+	color: gray;
 	margin: 20px;
+	background-color: black;
 }
 
 form {
@@ -20,6 +22,10 @@ form {
 
 .placeholder {
 	margin-top: 10px;
+}
+
+.navbar-form {
+	padding: 0;
 }
 
 #map {
