@@ -30,8 +30,8 @@ To install the project use npm
 
 ### Acknowledgments
 
-Knockout JS
-Live Search with Knockout.js - http://opensoul.org/2011/06/23/live-search-with-knockoutjs/
-Simple Search with KO by JohnMav - http://codepen.io/JohnMav/pen/OVEzWM/
-Udacity Discussion Forums for P5
+- Live Search with Knockout.js - http://opensoul.org/2011/06/23/live-search-with-knockoutjs/
+- Simple Search with KO by JohnMav - http://codepen.io/JohnMav/pen/OVEzWM/
+- Define map variables outside of map function - https://discussions.udacity.com/t/getting-markers-to-display-on-google-maps/13736/4
+- Relate markers to each location - https://discussions.udacity.com/t/i-cant-get-the-markers-to-change-based-on-the-search-query/15443/5
 
