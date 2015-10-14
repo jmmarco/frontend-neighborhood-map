@@ -19,24 +19,32 @@ var viewModel = function() {
 	'use strict';
 	var self = this;
 	var markersArray = [];
-	this.locations = ko.observableArray(locations);
-	console.log(locations.slice(0));
-	self.query = ko.observable('');
-	self.search = function(value) {
+	self.locations = ko.observableArray(locations); // make the locations an obs array
+
+	self.query = ko.observable(''); // this reads the stuff you type in the search bar
+
+	self.search = ko.computed(function() {
+		return ko.utils.arrayFilter(self.locations(), function(location) {
+			return location.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+		});
+	});
+
+	/*self.search = function(value) {
 		// remove all locations from the view
 		self.locations.removeAll();
-		for (var i in locations) {
+
+		for (var i in locations().length) {
 			console.log(locations[0]);
 			if (locations[i].name().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
 				self.locations().push(locations[i]);
 				console.dir(self.people);
 			}
 		}
-	};
+	};*/
 
 };
 
-// Activate knockout.js
+// Make the viewModel go! - AKA Activate knockout.js!
 ko.applyBindings(new viewModel());
 
 
@@ -51,6 +59,7 @@ var initMap = function() {
 
 	var map;
 	var infowindow;
+	var marker;
 
 	// Asign the specific lat and lon of NYC to newYorkCity
 	var newYorkCity = new google.maps.LatLng(40.7033127,-73.979681);
@@ -58,9 +67,25 @@ var initMap = function() {
 	// Create the map and attach it to the ID 'map'
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: newYorkCity,
+		fitbounds: true,
 		zoom: 12
 	});
 
 	// Assign the function InfoWindow to infowindow
 	infowindow = new google.maps.InfoWindow();
+
+	marker = new google.maps.Marker({
+	map: map,
+	draggable: true,
+	animation: google.maps.Animation.DROP,
+	position: newYorkCity // Drop the pin in NYC
+	});
+	marker.addListener('click', toggleBounce);
+	function toggleBounce() {
+		if (marker.getAnimation() !== null) {
+		marker.setAnimation(null);
+		} else {
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		}
+	}
 };
