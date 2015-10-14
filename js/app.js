@@ -8,8 +8,39 @@ var locations = [
 	name: 'Carolines on Brodway',
 	address: { lat: 40.7610514, lng: -73.9840729 }
 },
+{
+	name: 'Ben\'s Pizzeria',
+	address: { lat: 40.730636, lng: -74.000335 }
+},
+{
+	name: 'Billy\'s Bakery',
+	address: { lat: 40.745533, lng: -74.001901 }
+},
+{
+	name: 'Asuka Sushi',
+	address: { lat: 40.7452362, lng: -74.0011433 }
+},
+{
+	name: 'Joe\'s Pizzeria',
+	address: { lat: 40.7305589, lng: -74.0026389 }
+},
+{
+	name: 'Bryant Park',
+	address: { lat: 40.7536005, lng: -73.9854266 }
+},
+{
+	name: 'Central Park',
+	address: { lat: 40.7828687, lng: -73.9675491 }
+},
+{
+	name: 'Prospect Park',
+	address: { lat: 40.6805138, lng: -73.9609889 }
+},
+{
+	name: 'Wythe Hotel',
+	address: { lat: 40.7203352, lng: -73.9575497 }
+},
 ];
-
 
 
 
@@ -23,28 +54,16 @@ var viewModel = function() {
 
 	self.query = ko.observable(''); // this reads the stuff you type in the search bar
 
+	//self.locations.removeAll();
 	self.search = ko.computed(function() {
 		return ko.utils.arrayFilter(self.locations(), function(location) {
 			return location.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
 		});
 	});
 
-	/*self.search = function(value) {
-		// remove all locations from the view
-		self.locations.removeAll();
-
-		for (var i in locations().length) {
-			console.log(locations[0]);
-			if (locations[i].name().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-				self.locations().push(locations[i]);
-				console.dir(self.people);
-			}
-		}
-	};*/
-
 };
 
-// Make the viewModel go! - AKA Activate knockout.js!
+// Make the viewModel go!
 ko.applyBindings(new viewModel());
 
 
