@@ -9,7 +9,7 @@ This is an application that helps you find local business and places in your loc
 
 - Clone the repository - `git clone https://github.com/jmmarco/frontend-neighborhood-map.git`
 - Install dependencies using npm - `npm install`
-- Open webbrowser to `localhost`
+- Open web browser to `localhost`
 - Enjoy
 
 
@@ -28,7 +28,10 @@ To install the project use npm
 
 
 
-### Credits
+### Acknowledgments
 
 Knockout JS
 Live Search with Knockout.js - http://opensoul.org/2011/06/23/live-search-with-knockoutjs/
+Simple Search with KO by JohnMav - http://codepen.io/JohnMav/pen/OVEzWM/
+Udacity Discussion Forums for P5
+
