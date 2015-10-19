@@ -97,7 +97,7 @@ var marker;
 var initMap = function() {
 
 	// Asign the specific lat and lng of NYC
-	var newYorkCity = {lat: 40.7029741, lng: -74.259865};
+	var newYorkCity = {lat: 40.7080936, lng: -73.9941321};
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		// Map Options
