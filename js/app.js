@@ -1,63 +1,64 @@
 // Locations
+// LatLng object literals are not supported in the Geometry library (Google Maps). Specfied them separately
 var locations = [
 {
 	name: 'Comedy Cellar',
 	lat: 40.730219,
-	lng: -74.0005736,
+	lng: -74.0027623,
 	marker: "A"
 },
 {
 	name: 'Carolines on Brodway',
 	lat: 40.7610514,
-	lng: -73.9840729,
+	lng: -73.9862616,
 	marker: "B"
 },
 {
 	name: 'Ben\'s Pizzeria',
-	lat: 40.730636,
-	lng: -74.000335,
+	lat: 40.7272897,
+	lng: -74.0012167,
 	marker: "C"
 },
 {
 	name: 'Billy\'s Bakery',
-	lat: 40.745533,
-	lng: -74.001901,
+	lat: 40.7453376,
+	lng: -74.0040787,
 	marker: "D"
 },
 {
 	name: 'Asuka Sushi',
-	lat: 40.7452362,
-	lng: -74.0011433,
+	lat: 40.7452322,
+	lng: -74.001138,
 	marker: "E"
 },
 {
-	name: 'Joe\'s Pizzeria',
-	lat: 40.7305589,
-	lng: -74.0026389,
+	name: 'Joe\'s Pizza',
+	lat: 40.7272897,
+	lng: -74.0012167,
 	marker: "F"
 },
 {
 	name: 'Bryant Park',
-	lat: 40.7536005,
-	lng: -73.9854266,
+	lat: 40.7535965,
+	lng: -73.9854213,
 	marker: "G"
 },
 {
 	name: 'Central Park',
-	lat: 40.7828687,
-	lng: -73.9675491,
+	lat: 40.7828647,
+	lng: -73.9675438,
 	marker: "H"
 },
 {
 	name: 'Prospect Park',
-	lat: 40.6805138,
-	lng: -73.9609889,
+	lat: 40.6510946,
+	lng: -73.981447,
 	marker: "I"
 },
 {
 	name: 'Wythe Hotel',
-	lat: 40.7203352,
-	lng: -73.9575497,
+	lat: 40.7219936,
+	lng: -73.9601151,
 	marker: "J"
 }
 ];
@@ -91,16 +92,17 @@ ko.applyBindings(new viewModel());
 var map;
 var infowindow;
 var markersArray = [];
+var marker;
 
 var initMap = function() {
 
 	// Asign the specific lat and lng of NYC
-	var newYorkCity = {lat: 40.7033127, lng: -73.979681};
+	var newYorkCity = {lat: 40.7029741, lng: -74.259865};
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		// Map Options
 		center: newYorkCity,
-		fitbounds: true,
+		fitbounds: false,
 		zoom: 12
 	});
 
@@ -108,16 +110,24 @@ var initMap = function() {
 	infowindow = new google.maps.InfoWindow();
 
 
+	//var contentString = '<div>' + marker.name + '</div>';
+
+
 	// push markers into the markers array
 	for (var i = 0; i < locations.length; i++) {
 		marker = new google.maps.Marker({
-			position: new google.maps.LatLng(locations[0].lat, locations[0].lng),
-			title: '<p>' + locations[0].name + '</p>',
+			position: new google.maps.LatLng(locations[i].lat, locations[i].lng),
+			title: '<p>' + locations[i].name + '</p>',
+			visible: true,
 			map: map
 		});
 	}
 
 	markersArray.push(marker);
+
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.open(map, marker);
+	});
 
 	/*marker = new google.maps.Marker({
 	map: map,
