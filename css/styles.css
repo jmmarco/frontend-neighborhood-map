@@ -12,6 +12,14 @@ form {
 	padding-left: 0;
 }
 
+.fixed {
+	position: fixed;
+	z-index: 1;
+}
+
+.form-control {
+}
+
 .main-title {
 	font-size: 48px;
 }
