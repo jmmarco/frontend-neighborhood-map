@@ -5,61 +5,61 @@ var locations = [
 	name: 'Comedy Cellar',
 	lat: 40.730219,
 	lng: -74.0027623,
-	marker: "A"
+	marker: null
 },
 {
 	name: 'Carolines on Brodway',
 	lat: 40.7610514,
 	lng: -73.9862616,
-	marker: "B"
+	marker: null
 },
 {
 	name: 'Ben\'s Pizzeria',
 	lat: 40.7272897,
 	lng: -74.0012167,
-	marker: "C"
+	marker: null
 },
 {
 	name: 'Billy\'s Bakery',
 	lat: 40.7453376,
 	lng: -74.0040787,
-	marker: "D"
+	marker: null
 },
 {
 	name: 'Asuka Sushi',
 	lat: 40.7452322,
 	lng: -74.001138,
-	marker: "E"
+	marker: null
 },
 {
 	name: 'Joe\'s Pizza',
 	lat: 40.7272897,
 	lng: -74.0012167,
-	marker: "F"
+	marker: null
 },
 {
 	name: 'Bryant Park',
 	lat: 40.7535965,
 	lng: -73.9854213,
-	marker: "G"
+	marker: null
 },
 {
 	name: 'Central Park',
 	lat: 40.7828647,
 	lng: -73.9675438,
-	marker: "H"
+	marker: null
 },
 {
 	name: 'Prospect Park',
 	lat: 40.6510946,
 	lng: -73.981447,
-	marker: "I"
+	marker: null
 },
 {
 	name: 'Wythe Hotel',
 	lat: 40.7219936,
 	lng: -73.9601151,
-	marker: "J"
+	marker: null
 }
 ];
 
@@ -111,7 +111,6 @@ var initMap = function() {
 
 
 	//var contentString = '<div>' + marker.name + '</div>';
-
 
 	// push markers into the markers array
 	for (var i = 0; i < locations.length; i++) {
