@@ -8,7 +8,7 @@ This is an application that helps you find local business and places in your loc
 
 
 - Clone the repository - `git clone https://github.com/jmmarco/frontend-neighborhood-map.git`
-- Install dependencies using npm - `bower install`
+- Install dependencies using Bower - `bower install`
 - Open `index.html`
 
 
