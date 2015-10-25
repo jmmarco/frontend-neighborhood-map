@@ -1,6 +1,6 @@
 // Locations
 // LatLng object literals are not supported in the Geometry library (Google Maps). Specfied them separately
-var locations = [
+var locationData = [
 {
 	name: 'Comedy Cellar',
 	lat: 40.730219,
@@ -64,23 +64,23 @@ var locations = [
 ];
 
 
-
-
 // Write the View Model
 var viewModel = function() {
 	var self = this;
-	self.locations = ko.observableArray(locations); // make the locations an obs array
+	self.locations = ko.observableArray(locationData);
 
 	self.query = ko.observable('');
 
-
-	self.locations.removeAll(this);
 	self.search = ko.computed(function() {
-		return ko.utils.arrayFilter(self.locations(), function(location) {
-			return location.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
-		});
+		if(!self.query()) {
+			return self.locations();
+		} else {
+			console.log("Evaluating Search..");
+			return ko.utils.arrayFilter(self.locations(), function(location) {
+				return location.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+				});
+		}
 	});
-
 };
 
 // Make the viewModel go!
@@ -113,16 +113,21 @@ var initMap = function() {
 	//var contentString = '<div>' + marker.name + '</div>';
 
 	// push markers into the markers array
-	for (var i = 0; i < locations.length; i++) {
+	for (var i = 0; i < locationData.length; i++) {
 		marker = new google.maps.Marker({
-			position: new google.maps.LatLng(locations[i].lat, locations[i].lng),
-			title: '<p>' + locations[i].name + '</p>',
+			position: new google.maps.LatLng(locationData[i].lat, locationData[i].lng),
+			animation: google.maps.Animation.DROP,
+			title: '<p>' + locationData[i].name + '</p>',
 			visible: true,
 			map: map
 		});
 	}
 
 	markersArray.push(marker);
+
+	// Markers get pushed into the map, however they're not connected to KO's
+	// I'm not sure how to approach this.
+	//
 
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.open(map, marker);
