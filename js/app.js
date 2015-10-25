@@ -33,8 +33,8 @@ var locationData = [
 },
 {
 	name: 'Joe\'s Pizza',
-	lat: 40.7272897,
-	lng: -74.0012167,
+	lat: 40.730559,
+	lng: -74.004362,
 	marker: null
 },
 {
