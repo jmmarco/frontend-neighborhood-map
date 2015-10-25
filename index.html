@@ -13,20 +13,26 @@
 </head>
 
 <body>
-    <div class="container">
-        <form class="navbar-form " role="search">
-            <div class="form-group">
-                <input class="form-control" data-bind="textInput: query, valueUpdate: 'keyup'" autocomplete="off" type="search" placeholder="Search...">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form" role="search">
+                    <div class="form-group">
+                        <input class="form-control" data-bind="textInput: query, valueUpdate: 'keyup'" autocomplete="off" type="search" placeholder="Search...">
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-    <div class="container">
-        <ul class="list-group fixed" data-bind="foreach: search()">
-            <li class="list-group-item" data-bind="text: name"></li>
-        </ul>
-    </div>
-    <div class="container">
-        <div id="map"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <ul class="list-group fixed" data-bind="foreach: search()">
+                    <li class="list-group-item" data-bind="text: name"></li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div id="map"></div>
+            </div>
+        </div>
     </div>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
