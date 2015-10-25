@@ -39,6 +39,7 @@ form {
 #map {
 	height: 600px;
 	width: auto;
+	border-radius: 0.5%;
 
 }
 
