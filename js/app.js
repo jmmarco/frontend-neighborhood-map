@@ -121,24 +121,15 @@ var initMap = function() {
 			visible: true,
 			map: map
 		});
+		markersArray.push(marker);
 	}
 
-	markersArray.push(marker);
-
-	// Markers get pushed into the map, however they're not connected to KO's
-	// I'm not sure how to approach this.
-	//
 
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.open(map, marker);
 	});
 
-	/*marker = new google.maps.Marker({
-	map: map,
-	draggable: true,
-	animation: google.maps.Animation.DROP,
-	position: newYorkCity //
-	});
+	/*
 	marker.addListener('click', toggleBounce);
 	function toggleBounce() {
 		if (marker.getAnimation() !== null) {
