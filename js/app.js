@@ -66,36 +66,108 @@ var locationData = [
 // ----------- View Model ----------- //
 var viewModel = function() {
 	var self = this;
-	self.locations = ko.observableArray(locationData);
 
+	mapOptions = {
+		zoom: 12,
+		center: {lat: 40.7127, lng: -74.0059},
+	};
+
+	self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+
+
+	self.allLocations = [];
+	locationData.forEach(function(venue) {
+		self.allLocations.push(new Venue(venue));
+		//console.log(self.allLocations);
+		});
+
+
+	self.allLocations.forEach(function(venue) {
+		var markerOptions = {
+			map: self.map,
+			position: venue.LatLng,
+			title: '<p>' + locationData.name + '</p>'
+		};
+
+		venue.marker = new google.maps.Marker(markerOptions);
+
+		// Add event listener here
+
+	});
+
+	self.visibleVenues = ko.observableArray();
+
+	self.allLocations.forEach(function(venue) {
+		self.visibleVenues.push(venue);
+	});
+
+	self.userInput = ko.observable('');
+
+	self.filterMarkers = function() {
+		var searchInput =  self.userInput().toLowerCase();
+		self.visibleVenues.removeAll();
+
+		self.allLocations.forEach(function(venue) {
+			venue.marker.setVisible(false);
+
+			if (venue.name.toLowerCase().indexOf(searchInput) !== -1) {
+				self.visibleVenues.push(venue);
+			}
+		});
+
+		self.visibleVenues().forEach(function(venue) {
+			venue.marker.setVisible(true);
+		});
+	};
+
+	function Venue(dataObj) {
+		this.name = dataObj.name;
+		console.log(this.name);
+		this.LatLng = { lat: dataObj.lat, lng: dataObj.lng };
+		console.log(this.LatLng);
+
+		// save  a reference to venue's map marker
+
+		this.marker = null;
+	}
+
+
+
+	/*
+	console.log(markersArray);
 	self.markers = ko.observableArray(markersArray);
+	console.log(self.markers());
+	Notes: When I run the code above markersArray appears empty
+	*/
 
+
+	/*
 	self.query = ko.observable('');
 
 	self.search = ko.computed(function() {
 		if(!self.query()) {
+			mapMarker.setVisible(false);
 			return self.locations();
 		} else {
 			console.log("Evaluating Search..");
+			mapMarker.setVisible(true);
 			return ko.utils.arrayFilter(self.locations(), function(location) {
 				return location.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
 			});
 		}
 	});
+	*/
 };
 
 // Make the viewModel go!
 ko.applyBindings(new viewModel());
 
 
-
+/*
 // ----------- Map ----------- //
-var map;
-var infowindow;
+var map, infowindow, marker, mapOptions;
 var markersArray = [];
-var marker;
-var mapOptions;
-
 var initMap = function() {
 
 	// Asign the specific lat and lng of NYC
@@ -120,11 +192,37 @@ var initMap = function() {
   	// To remove a marker uncomment line below
   	// marker.setMap(null);
 
+function initMarkers() {
+	var self = this;
+	self.markers = ko.observableArray();
+
+	for (var i = 0; i < locationData.length; i++) {
+		marker = new google.maps.Marker({
+			position: new google.maps.LatLng(locationData[i].lat, locationData[i].lng),
+			animation: google.maps.Animation.DROP,
+			title: '<p>' + locationData[i].name + '</p>',
+			visible: true,
+			map: map
+		});
+		self.markers.push(marker);
+		marker.addListener('click', toggleBounce);
+		console.log(self.markers);
+	}
+
+	function toggleBounce() {
+		if (marker.getAnimation() !== null) {
+			marker.setAnimation(null);
+		} else {
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		}
+	}
+
+}
+
+initMarkers();
 
 
-
-
-
+	/*
 	// push markers into the markers array
 	//var bounds = new google.maps.LatLngBounds();
 
@@ -137,6 +235,7 @@ var initMap = function() {
 			map: map
 		});
 		markersArray.push(marker);
+		console.log(markersArray);
 		marker.addListener('click', toggleBounce);
 	}
 
@@ -152,11 +251,34 @@ var initMap = function() {
 
 	/*google.maps.event.addListener(marker, 'click', function() {
 		infowindow.open(map, marker);
-	});*/
-
-
+	});
 
 };
+*/
 
 // ----------- AJAX ----------- //
 
+var config = {
+    apiKey: 'XXXXXXXXXXXXXX',
+    authUrl: 'https://foursquare.com/',
+    apiUrl: 'https://api.foursquare.com/'
+  };
+
+function loadData() {
+	var $uber = $('#uber');
+
+	// clear out data
+	$uber.text('');
+
+	baseURL = 'https://api.uber.com/v1/products?';
+
+
+	// load UBER API
+	var xhr = new XMLHttpRequest();
+	xhr.setRequestHeader('Authorization', 'Token fOLxOsSYP0wFnCeJE8mV1KZSS5643TNaWuqnuPWT');
+	xhr.open('GET', 'https://api.uber.com/v1/products?latitude=37.7759792&longitude=-122.41823');
+
+	$getJSON();
+
+
+}
