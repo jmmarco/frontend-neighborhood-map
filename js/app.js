@@ -100,6 +100,9 @@ var viewModel = function() {
 				venue.marker.setAnimation(null);
 			} else {
 				venue.marker.setAnimation(google.maps.Animation.BOUNCE);
+				setTimeout(function() {
+					venue.marker.setAnimation(null);
+				}, 2000);
 			}
 		}
 
@@ -141,32 +144,6 @@ var viewModel = function() {
 		this.marker = null;
 	}
 
-
-
-	/*
-	console.log(markersArray);
-	self.markers = ko.observableArray(markersArray);
-	console.log(self.markers());
-	Notes: When I run the code above markersArray appears empty
-	*/
-
-
-	/*
-	self.query = ko.observable('');
-
-	self.search = ko.computed(function() {
-		if(!self.query()) {
-			mapMarker.setVisible(false);
-			return self.locations();
-		} else {
-			console.log("Evaluating Search..");
-			mapMarker.setVisible(true);
-			return ko.utils.arrayFilter(self.locations(), function(location) {
-				return location.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
-			});
-		}
-	});
-	*/
 };
 
 // Make the viewModel go!
