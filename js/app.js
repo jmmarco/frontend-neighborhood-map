@@ -2,55 +2,55 @@
 var locationData = [
 {
 	name: 'Comedy Cellar',
-	lat: 40.730219 ,
+	lat: 40.730219,
 	lng: -74.00057400000003,
 	marker: null
 },
 {
 	name: 'Carolines on Brodway',
-	lat: 40.761051 ,
+	lat: 40.761051,
 	lng: -73.98407299999997,
 	marker: null
 },
 {
 	name: 'Ben\'s Pizzeria',
-	lat: 40.730392 ,
+	lat: 40.730392,
 	lng: -74.00032399999998,
 	marker: null
 },
 {
 	name: 'Billy\'s Bakery',
-	lat: 40.717715 ,
+	lat: 40.717715,
 	lng: -74.00447600000001,
 	marker: null
 },
 {
 	name: 'Asuka Sushi',
-	lat: 40.745232 ,
+	lat: 40.745232,
 	lng: -73.99894899999998,
 	marker: null
 },
 {
 	name: 'Joe\'s Pizza',
-	lat: 40.730559 ,
+	lat: 40.730559,
 	lng: -74.00216799999998,
 	marker: null
 },
 {
 	name: 'Bryant Park',
-	lat: 40.753596 ,
+	lat: 40.753596,
 	lng:  -73.98323299999998,
 	marker: null
 },
 {
 	name: 'Central Park',
-	lat: 40.782865 ,
+	lat: 40.782865,
 	lng: -73.96535499999999,
 	marker: null
 },
 {
 	name: 'Prospect Park',
-	lat: 40.660204 ,
+	lat: 40.660204,
 	lng: -73.96895599999999,
 	marker: null
 },
@@ -87,12 +87,21 @@ var viewModel = function() {
 		var markerOptions = {
 			map: self.map,
 			position: venue.LatLng,
+			animation: google.maps.Animation.DROP,
 			title: '<p>' + locationData.name + '</p>'
 		};
-
+		// Add event listener
 		venue.marker = new google.maps.Marker(markerOptions);
+		venue.marker.addListener('click', toggleBounce);
 
-		// Add event listener here
+		// Add Google's toggle Bounce
+		function toggleBounce() {
+			if (venue.marker.getAnimation() !== null) {
+				venue.marker.setAnimation(null);
+			} else {
+				venue.marker.setAnimation(google.maps.Animation.BOUNCE);
+			}
+		}
 
 	});
 
@@ -258,11 +267,71 @@ initMarkers();
 
 // ----------- AJAX ----------- //
 
+// Foursquare
+
+
+/*
 var config = {
     apiKey: 'XXXXXXXXXXXXXX',
     authUrl: 'https://foursquare.com/',
     apiUrl: 'https://api.foursquare.com/'
   };
+
+ */
+
+
+
+
+
+// Uber
+var uberClientID = 'cjKN8yPx-XUsLw1Z77bywimofddFMaDQ',
+uberServerToken = 'fOLxOsSYP0wFnCeJE8mV1KZSS5643TNaWuqnuPWT';
+
+
+
+// Store the latitude and longitude
+var userLatitude, userLongitude,
+partyLatitude, partyLongitude;
+
+userLongitude = 40.7127;
+userLongitude = -74.0059;
+
+partyLatitude = locationData[0].lat;
+partyLongitude = locationData[0].lng;
+
+
+
+
+	//Query UBER API if needed
+	getEstimatesForUserLocation(userLatitude, userLongitude);
+
+
+function getEstimatesForUserLocation(latitude, longitude) {
+	$.ajax({
+		url: "https://api.uber.com/v1/estimates/price",
+		headers: {
+			Authorization: "Token " + uberServerToken
+		},
+		dataType: "jsonp",
+		data: {
+			start_latitude: latitude,
+			start_longitude: longitude,
+			end_latitude: partyLatitude,
+			end_longitude: partyLongitude
+		},
+		success: function(result) {
+			console.log(result);
+		}
+	});
+}
+
+/*
+$.ajax({
+	dataType: "json",
+	url: 'https://api.uber.com/v1/products',
+	data: {latitude: 40.7127 , longitude: -74.0059},
+	sucess: success
+});
 
 function loadData() {
 	var $uber = $('#uber');
@@ -281,4 +350,4 @@ function loadData() {
 	$getJSON();
 
 
-}
+}*/
