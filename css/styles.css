@@ -12,6 +12,14 @@ form {
 	padding-left: 0;
 }
 
+.button {
+    background-image: url('../images/UBER_API_Button_2x_Grey_2px_round.png');
+    background-size: cover;
+    width: 280px;
+    height: 44px;
+    margin: 0 auto;
+}
+
 .fixed {
 	position: fixed;
 	z-index: 1;
@@ -41,6 +49,13 @@ form {
 	width: auto;
 	border-radius: 0.5%;
 
+}
+
+#time {
+    text-align: right;
+    margin-top: 0;
+    padding-top: 10px;
+    padding-right: 10px;
 }
 
 a {
