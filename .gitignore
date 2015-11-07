@@ -40,3 +40,8 @@ Thumbs.db
 ##################
 bower_components
 places
+
+# Test files
+test.js
+css/style.css
+test.html
