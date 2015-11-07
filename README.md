@@ -47,6 +47,7 @@ python -m SimpleHTTPServer 8000
 - [Define map variables outside of map function](https://discussions.udacity.com/t/getting-markers-to-display-on-google-maps/13736/4)
 - [Relate markers to each location](https://discussions.udacity.com/t/i-cant-get-the-markers-to-change-based-on-the-search-query/15443/5)
 - [Remove markers](https://developers.google.com/maps/documentation/javascript/examples/marker-remove)
+- [Defining Locations for Map](https://discussions.udacity.com/t/defining-locations-for-map/33823/5)
 
 
 ### Questions 1 on 1 with JohnMav
