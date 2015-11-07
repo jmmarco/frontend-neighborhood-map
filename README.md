@@ -4,6 +4,12 @@ This is an application that helps you find local business and places in your loc
 - Homepage:
 - Source:
 
+
+API's
+
+- UBER API
+This returns the available UBER products for a given location
+
 ## Quickstart
 
 
@@ -21,8 +27,16 @@ This is an application that helps you find local business and places in your loc
  - Bootstrap
 
 
+
 ## Installation
 To install the project use [bower](http://bower.io/) package manager
+To run the app: Run a local webserver on port 8000:
+
+Tip: You can use Python's Simple HTTP Server. Like this:
+```
+python -m SimpleHTTPServer 8000
+```
+
 
 
 
