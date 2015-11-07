@@ -18,8 +18,7 @@ This is an application that helps you find local business and places in your loc
  - KnockoutJS
  - Google Maps API
  - jQuery
- - Bootsrtrap
- - Fontawesome
+ - Bootstrap
 
 
 ## Installation
@@ -42,4 +41,3 @@ To install the project use [bower](http://bower.io/) package manager
 - Markers, do I need to define a marker variable on each hardcoded location?
 - Async scripts all have to be async, which ones do I want to defer?
 - How to make the list appear over the MAP (css)?
-
