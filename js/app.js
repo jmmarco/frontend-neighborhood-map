@@ -65,7 +65,6 @@ var viewModel = function() {
     };
 
     self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-    self
 
 
 
@@ -283,7 +282,7 @@ var uberClientID = 'cjKN8yPx-XUsLw1Z77bywimofddFMaDQ',
 var userLatitude, userLongitude,
     partyLatitude, partyLongitude;
 
-userLongitude = 40.7127;
+userLatitude = 40.7127;
 userLongitude = -74.0059;
 
 partyLatitude = locationData[0].lat;
@@ -302,7 +301,7 @@ function getEstimatesForUserLocation(latitude, longitude) {
         headers: {
             Authorization: "Token " + uberServerToken
         },
-        dataType: "jsonp",
+        dataType: "json",
         data: {
             start_latitude: latitude,
             start_longitude: longitude,
