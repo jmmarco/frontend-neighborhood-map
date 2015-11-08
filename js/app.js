@@ -97,19 +97,23 @@ var viewModel = function() {
     };
     // Add event listener
     venue.marker = new google.maps.Marker(markerOptions);
-    venue.marker.addListener('click', toggleBounce);
+
+    venue.marker.addListener('click', function() {
+      toggleBounce();
+      self.map.panTo(venue.coordinates);
+      venue.infowindow.setContent(contentString);
+      venue.infowindow.open(self.map, venue.marker);
+    });
+
 
     // Add Google's toggle Bounce
     function toggleBounce() {
       if (venue.marker.getAnimation() !== null) {
         venue.marker.setAnimation(null);
       } else {
-        venue.infowindow.close(); // This doesn't work - FIX
         venue.marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
           venue.marker.setAnimation(null);
-          venue.infowindow.setContent(contentString);
-          venue.infowindow.open(self.map, venue.marker);
         }, 1000);
       }
     }
@@ -181,7 +185,7 @@ function getUberForUserLocation(latitude, longitude) {
     success: function(result) {
       //console.log(result);
       callback(result.products);
-      console.log(callback(result.products)); // <-- Up to here I get the results I need
+      //console.log(callback(result.products)); // <-- Up to here I get the results I need
       //console.log(result.products);
     },
     error: function(error) {
@@ -202,7 +206,7 @@ function getUberForUserLocation(latitude, longitude) {
         costMin = priceDetails.cost_per_minute;
         costDistance = priceDetails.cost_per_distance;
         minFare = priceDetails.minimum;
-        //console.log(name, image, costMin, costDistance, minPrice);
+        //console.log(name, image, costMin, costDistance, minFare);
       }
       uberResults += '<div>';
       uberResults += '<h6>' + 'Service: ' + name + '</h6>';
@@ -213,8 +217,8 @@ function getUberForUserLocation(latitude, longitude) {
       uberResults += '</div>';
       //console.log(uberResults);
     }
-    //console.log(uberResults);
-    return(uberResults);
+    //console.log(uberResults); // If you uncomment this you will see the results on the console
+    return(uberResults); // This is my return statment for getUberForUserLocation
   }
 }
 
