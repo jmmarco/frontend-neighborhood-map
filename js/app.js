@@ -67,31 +67,31 @@ var viewModel = function() {
   self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
 
-
-
   self.allLocations = [];
   locationData.forEach(function(venue) {
     self.allLocations.push(new Venue(venue));
-    //console.log(self.allLocations);
   });
 
 
   self.allLocations.forEach(function(venue) {
-
-
     var contentString = '<div>' + venue.name + '</div>';
+    contentString += '<h3>API stuff goes here..</h3>';
+    contentString += '<h6>' + venue.coordinates.lat + ',' + venue.coordinates.lng + '</h6>';
+    // This is not over yet! -_-
+    contentString += getUberForUserLocation(venue.coordinates.lat, venue.coordinates.lng); // <-- Why is this undefined?
+    console.log(getUberForUserLocation(venue.coordinates.lat, venue.coordinates.lng)); // <-- Why is this undefined?
+
+
 
     venue.infowindow = new google.maps.InfoWindow({
-      position: venue.LatLng,
+      position: venue.coordinates,
       content: contentString
     });
 
 
-
-
     var markerOptions = {
       map: self.map,
-      position: venue.LatLng,
+      position: venue.coordinates,
       animation: google.maps.Animation.DROP,
       title: venue.name
     };
@@ -104,16 +104,15 @@ var viewModel = function() {
       if (venue.marker.getAnimation() !== null) {
         venue.marker.setAnimation(null);
       } else {
+        venue.infowindow.close(); // This doesn't work - FIX
         venue.marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
           venue.marker.setAnimation(null);
           venue.infowindow.setContent(contentString);
           venue.infowindow.open(self.map, venue.marker);
-        }, 2000);
+        }, 1000);
       }
     }
-
-
 
   });
 
@@ -142,156 +141,31 @@ var viewModel = function() {
     });
   };
 
-  function Venue(dataObj) {
-    this.name = dataObj.name;
-    console.log(this.name);
-    this.LatLng = {
-      lat: dataObj.lat,
-      lng: dataObj.lng
+  // Helper function to create each venue
+  function Venue(data) {
+    this.name = data.name;
+    //console.log(this.name);
+    this.coordinates = {
+      lat: data.lat,
+      lng: data.lng
     };
-    console.log(this.LatLng);
+    //console.log(this.coordinates);
 
     // save  a reference to venue's map marker
-
     this.marker = null;
   }
 
 };
 
-// Make the viewModel go!
-ko.applyBindings(new viewModel());
-
-
-/*
-// ----------- Map ----------- //
-var map, infowindow, marker, mapOptions;
-var markersArray = [];
-var initMap = function() {
-
-	// Asign the specific lat and lng of NYC
-	var newYorkCity = {lat: 40.7127, lng: -74.0059};
-
-	// Map Options
-	mapOptions = {
-		center: newYorkCity,
-		fitbounds: true,
-		zoom: 13,
-	};
-
-	map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-	var marker = new google.maps.Marker({
-		position: newYorkCity,
-    	map: map,
-    	animation: google.maps.Animation.DROP,
-    	title: 'Hello World!'
-  	});
-
-  	// To remove a marker uncomment line below
-  	// marker.setMap(null);
-
-function initMarkers() {
-	var self = this;
-	self.markers = ko.observableArray();
-
-	for (var i = 0; i < locationData.length; i++) {
-		marker = new google.maps.Marker({
-			position: new google.maps.LatLng(locationData[i].lat, locationData[i].lng),
-			animation: google.maps.Animation.DROP,
-			title: '<p>' + locationData[i].name + '</p>',
-			visible: true,
-			map: map
-		});
-		self.markers.push(marker);
-		marker.addListener('click', toggleBounce);
-		console.log(self.markers);
-	}
-
-	function toggleBounce() {
-		if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-		} else {
-			marker.setAnimation(google.maps.Animation.BOUNCE);
-		}
-	}
-
-}
-
-initMarkers();
-
-
-	/*
-	// push markers into the markers array
-	//var bounds = new google.maps.LatLngBounds();
-
-	for (var i = 0; i < locationData.length; i++) {
-		marker = new google.maps.Marker({
-			position: new google.maps.LatLng(locationData[i].lat, locationData[i].lng),
-			animation: google.maps.Animation.DROP,
-			title: '<p>' + locationData[i].name + '</p>',
-			visible: true,
-			map: map
-		});
-		markersArray.push(marker);
-		console.log(markersArray);
-		marker.addListener('click', toggleBounce);
-	}
-
-
-	function toggleBounce() {
-		if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-		} else {
-			marker.setAnimation(google.maps.Animation.BOUNCE);
-		}
-	}
-
-
-	/*google.maps.event.addListener(marker, 'click', function() {
-		infowindow.open(map, marker);
-	});
-
-};
-*/
 
 // ----------- AJAX ----------- //
-
-// Foursquare
-
-
-/*
-var config = {
-    apiKey: 'XXXXXXXXXXXXXX',
-    authUrl: 'https://foursquare.com/',
-    apiUrl: 'https://api.foursquare.com/'
-  };
-
- */
-
-
-
-
 
 // Uber
 var uberClientID = 'cjKN8yPx-XUsLw1Z77bywimofddFMaDQ',
   uberServerToken = 'fOLxOsSYP0wFnCeJE8mV1KZSS5643TNaWuqnuPWT';
 
-// Store the latitude and longitude
-var userLatitude, userLongitude,
-  partyLatitude, partyLongitude;
-
-userLatitude = 40.7127;
-userLongitude = -74.0059;
-
-partyLatitude = locationData[0].lat;
-partyLongitude = locationData[0].lng;
-
-
-
-
 //Query UBER API if needed
-getUberForUserLocation(userLatitude, userLongitude);
-
+//getUberForUserLocation(locationData[0].lat, locationData[0].lng); // Passing in lat and lng of one location for test purposes
 
 function getUberForUserLocation(latitude, longitude) {
   $.ajax({
@@ -301,63 +175,48 @@ function getUberForUserLocation(latitude, longitude) {
     },
     dataType: "json",
     data: {
-      latitude: partyLatitude,
-      longitude: partyLongitude
+      latitude: latitude,
+      longitude: longitude
     },
     success: function(result) {
-      //console.log(result.products);
+      //console.log(result);
       callback(result.products);
+      console.log(callback(result.products)); // <-- Up to here I get the results I need
+      //console.log(result.products);
+    },
+    error: function(error) {
+      console.log("Uber cannot be contacted");
     }
+
   });
 
   function callback(result) {
-    console.log(result.length);
+    //console.log(result.length);
+    var uberResults = '';
     for (var i = 0; i < result.length; i++) {
-      console.log(result[i]);
-      console.log(result[i].display_name);
-      console.log(result[i].image);
+      name = result[i].display_name;
+      image = result[i].image;
 
       if (result[i].price_details !== null) {
         priceDetails = result[i].price_details;
-        console.log(priceDetails.cost_per_minute);
-        console.log(priceDetails.cost_per_distance);
-        console.log(priceDetails.minimum);
-        console.log(priceDetails);
-
+        costMin = priceDetails.cost_per_minute;
+        costDistance = priceDetails.cost_per_distance;
+        minFare = priceDetails.minimum;
+        //console.log(name, image, costMin, costDistance, minPrice);
       }
-
+      uberResults += '<div>';
+      uberResults += '<h6>' + 'Service: ' + name + '</h6>';
+      uberResults += '<img src="'+ image + '">';
+      uberResults += '<h6>' + 'Cost per minute: $' + costMin + '</h6>';
+      uberResults += '<h6>' + 'Cost per mile: $' + costDistance + '</h6>';
+      uberResults += '<h6>' + 'Minimumin Fare: $'+ minFare + '</h6>';
+      uberResults += '</div>';
+      //console.log(uberResults);
     }
-
+    //console.log(uberResults);
+    return(uberResults);
   }
-
 }
 
-
-
-
-/*
-$.ajax({
-	dataType: "json",
-	url: 'https://api.uber.com/v1/products',
-	data: {latitude: 40.7127 , longitude: -74.0059},
-	sucess: success
-});
-
-function loadData() {
-	var $uber = $('#uber');
-
-	// clear out data
-	$uber.text('');
-
-	baseURL = 'https://api.uber.com/v1/products?';
-
-
-	// load UBER API
-	var xhr = new XMLHttpRequest();
-	xhr.setRequestHeader('Authorization', 'Token fOLxOsSYP0wFnCeJE8mV1KZSS5643TNaWuqnuPWT');
-	xhr.open('GET', 'https://api.uber.com/v1/products?latitude=37.7759792&longitude=-122.41823');
-
-	$getJSON();
-
-
-}*/
+// Make the viewModel go!
+ko.applyBindings(new viewModel());
