@@ -1,226 +1,315 @@
 // ----------- Locations ----------- //
 var locationData = [{
-  name: 'Comedy Cellar',
-  lat: 40.730219,
-  lng: -74.00057400000003,
-  marker: null
+    name: 'Comedy Cellar',
+    tag: 'comedy',
+    lat: 40.730219,
+    lng: -74.00057400000003,
+    marker: null
 }, {
-  name: 'Carolines on Brodway',
-  lat: 40.761051,
-  lng: -73.98407299999997,
-  marker: null
+    name: 'Carolines on Brodway',
+    tag: 'comedy',
+    lat: 40.761051,
+    lng: -73.98407299999997,
+    marker: null
 }, {
-  name: 'Ben\'s Pizzeria',
-  lat: 40.730392,
-  lng: -74.00032399999998,
-  marker: null
+    name: 'Ben\'s Pizzeria',
+    tag: 'pizza',
+    lat: 40.730392,
+    lng: -74.00032399999998,
+    marker: null
 }, {
-  name: 'Billy\'s Bakery',
-  lat: 40.717715,
-  lng: -74.00447600000001,
-  marker: null
+    name: 'Billy\'s Bakery',
+    tag: 'bakery',
+    lat: 40.717715,
+    lng: -74.00447600000001,
+    marker: null
 }, {
-  name: 'Asuka Sushi',
-  lat: 40.745232,
-  lng: -73.99894899999998,
-  marker: null
+    name: 'Asuka Sushi',
+    tag: 'sushi',
+    lat: 40.745232,
+    lng: -73.99894899999998,
+    marker: null
 }, {
-  name: 'Joe\'s Pizza',
-  lat: 40.730559,
-  lng: -74.00216799999998,
-  marker: null
+    name: 'Joe\'s Pizza',
+    tag: 'pizza',
+    lat: 40.730559,
+    lng: -74.00216799999998,
+    marker: null
 }, {
-  name: 'Bryant Park',
-  lat: 40.753596,
-  lng: -73.98323299999998,
-  marker: null
+    name: 'Bryant Park',
+    tag: 'park',
+    lat: 40.753596,
+    lng: -73.98323299999998,
+    marker: null
 }, {
-  name: 'Central Park',
-  lat: 40.782865,
-  lng: -73.96535499999999,
-  marker: null
+    name: 'Central Park',
+    tag: 'park',
+    lat: 40.782865,
+    lng: -73.96535499999999,
+    marker: null
 }, {
-  name: 'Prospect Park',
-  lat: 40.660204,
-  lng: -73.96895599999999,
-  marker: null
+    name: 'Prospect Park',
+    tag: 'park',
+    lat: 40.660204,
+    lng: -73.96895599999999,
+    marker: null
 }, {
-  name: 'Wythe Hotel',
-  lat: 40.721994,
-  lng: -73.95792599999999,
-  marker: null
+    name: 'Wythe Hotel',
+    tag: 'hotel',
+    lat: 40.721994,
+    lng: -73.95792599999999,
+    marker: null
 }];
 
 
 // ----------- View Model ----------- //
 var viewModel = function() {
-  var self = this;
+    // Create a reference to 'this'
+    var self = this;
 
-  mapOptions = {
-    zoom: 12,
-    center: {
-      lat: 40.7127,
-      lng: -74.0059
-    },
-  };
-
-  self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-
-  self.allLocations = [];
-  locationData.forEach(function(venue) {
-    self.allLocations.push(new Venue(venue));
-  });
-
-
-  self.allLocations.forEach(function(venue) {
-    var contentString = '<div>' + venue.name + '</div>';
-    contentString += '<h3>API stuff goes here..</h3>';
-    contentString += '<h6>' + venue.coordinates.lat + ',' + venue.coordinates.lng + '</h6>';
-    // This is not over yet! -_-
-    contentString += getUberForUserLocation(venue.coordinates.lat, venue.coordinates.lng); // <-- Why is this undefined?
-    console.log(getUberForUserLocation(venue.coordinates.lat, venue.coordinates.lng)); // <-- Why is this undefined?
-
-
-
-    venue.infowindow = new google.maps.InfoWindow({
-      position: venue.coordinates,
-      content: contentString
-    });
-
-
-    var markerOptions = {
-      map: self.map,
-      position: venue.coordinates,
-      animation: google.maps.Animation.DROP,
-      title: venue.name
-    };
-    // Add event listener
-    venue.marker = new google.maps.Marker(markerOptions);
-
-    venue.marker.addListener('click', function() {
-      toggleBounce();
-      self.map.panTo(venue.coordinates);
-      venue.infowindow.setContent(contentString);
-      venue.infowindow.open(self.map, venue.marker);
-    });
-
-
-    // Add Google's toggle Bounce
-    function toggleBounce() {
-      if (venue.marker.getAnimation() !== null) {
-        venue.marker.setAnimation(null);
-      } else {
-        venue.marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function() {
-          venue.marker.setAnimation(null);
-        }, 1000);
-      }
+    // Constructor function for each venue
+    function Venue(data) {
+        var self = this;
+        self.name = data.name;
+        self.coordinates = {
+            lat: data.lat,
+            lng: data.lng
+        };
+        self.tag = data.tag;
+        self.marker = null; // I don't think I really need these here
+        self.infoWindow = null; // I don't think I really need these here
+        //console.log(self.coordinates, self.tag, self.name, self.marker, self.infoWindow);
     }
 
-  });
 
-  self.visibleVenues = ko.observableArray();
+    // Set the options for the map
+    var mapOptions = {
+        zoom: 17,
+        center: {
+            lat: 40.7289325,
+            lng: -73.998362
+        },
+    };
 
-  self.allLocations.forEach(function(venue) {
-    self.visibleVenues.push(venue);
-  });
 
-  self.userInput = ko.observable('');
+    // Create the map
+    self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-  self.filterMarkers = function() {
-    var searchInput = self.userInput().toLowerCase();
-    self.visibleVenues.removeAll();
+    // Create the InfoWindow
+    self.infoWindow = new google.maps.InfoWindow();
+
+
+    // Create an array to hold each venue
+    self.allLocations = [];
+    locationData.forEach(function(venue) {
+        self.allLocations.push(new Venue(venue));
+    });
+    //console.log(self.allLocations);
 
     self.allLocations.forEach(function(venue) {
-      venue.marker.setVisible(false);
+        // Set the options for the marker
+        var markerOptions = {
+            map: self.map,
+            position: venue.coordinates,
+            animation: google.maps.Animation.DROP,
+            title: venue.name
+        };
 
-      if (venue.name.toLowerCase().indexOf(searchInput) !== -1) {
-        self.visibleVenues.push(venue);
-      }
+        console.log(venue.coordinates.lat);
+        // Create the marker
+        venue.marker = new google.maps.Marker(markerOptions);
+
+        // Add a 'click' event listener for each marker
+        venue.marker.addListener('click', function(){
+            self.clickHandler(venue);
+            self.foursquare(venue);
+        });
+
+
+
+
     });
 
-    self.visibleVenues().forEach(function(venue) {
-      venue.marker.setVisible(true);
-    });
-  };
 
-  // Helper function to create each venue
-  function Venue(data) {
-    this.name = data.name;
-    //console.log(this.name);
-    this.coordinates = {
-      lat: data.lat,
-      lng: data.lng
+    // Create a click handler function (helps keep things clean)
+    self.clickHandler = function(venue) {
+
+        // Zoom in a bit
+        self.map.setZoom(18);
+
+        // Pan to coordinates
+        self.map.panTo(venue.coordinates);
+
+        // Set the Info Window
+        self.infoWindow.open(self.map, venue.marker);
+
+        // Use an IIFE to make markers dance ^_^
+        (function() {
+            if (venue.marker.getAnimation() !== null) {
+                venue.marker.setAnimation(null);
+            } else {
+                venue.marker.setAnimation(google.maps.Animation.BOUNCE);
+                setTimeout(function() {
+                    venue.marker.setAnimation(null);
+                }, 700); // Default timeout that Google Maps uses for it's markers
+            }
+            // Close Info Window Automatically after 2 seconds // UX Note: This might be annoying for some users
+            setTimeout(function() {
+                self.infoWindow.close();
+            }, 2000);
+        })();
+
     };
-    //console.log(this.coordinates);
 
-    // save  a reference to venue's map marker
-    this.marker = null;
-  }
+
+
+
+    // Beign with Knockout Stuff
+    self.visibleVenues = ko.observableArray();
+
+    self.allLocations.forEach(function(venue) {
+        self.visibleVenues.push(venue);
+    });
+
+    self.userInput = ko.observable('');
+
+    self.filterMarkers = function() {
+        var searchInput = self.userInput().toLowerCase();
+        self.visibleVenues.removeAll();
+
+        self.allLocations.forEach(function(venue) {
+            venue.marker.setVisible(false);
+
+            if (venue.name.toLowerCase().indexOf(searchInput) !== -1 || venue.tag.toLowerCase().indexOf(searchInput) !== -1) {
+                self.visibleVenues.push(venue);
+            }
+        });
+
+        self.visibleVenues().forEach(function(venue) {
+            venue.marker.setVisible(true);
+        });
+    };
+
+
+
+    // ----------- AJAX ----------- //
+
+    self.foursquare = function(venue) {
+        // Foursquare
+        // https://api.foursquare.com/v2/venues/search?client_id=C5SM22PLTAYUAFJZP0YGUJCL0KKHD4U2PAMFEEKF3KGNSTEL&client_secret=ZY0KAMOMLB13YYA55ZKJPZAUFL5L3O3HVKWCM2ZRIVW1GOZW&v=20130815%20&ll=40.7,-74%20&query=sushi
+
+        var config = {
+            clientId: 'C5SM22PLTAYUAFJZP0YGUJCL0KKHD4U2PAMFEEKF3KGNSTEL',
+            clientSecret: 'ZY0KAMOMLB13YYA55ZKJPZAUFL5L3O3HVKWCM2ZRIVW1GOZW',
+            authUrl: 'https://foursquare.com/',
+            apiUrl: 'https://api.foursquare.com/v2/venues/search',
+            version: 'v=20140806'
+        };
+
+        $.ajax({
+            url: config.apiUrl,
+            data: 'client_id=' + config.clientId + '&' + 'client_secret=' + config.clientSecret + '&' + config.version + '&' + 'll=' + venue.coordinates.lat + ',' + venue.coordinates.lng,
+            dataType: 'json',
+
+            success: function(data) {
+                console.log(data.response.venues);
+                results = data.response.venues;
+                for (var i = 0; i < results.length; i++){
+                    if (results[i].name === venue.name){
+                        console.log(results[i].name);
+                        console.log(results[i].url);
+                        console.log(results[i].contact.formattedPhone);
+                        console.log(results[i].location.address);
+                        console.log(results[i].contact.twitter);
+
+                    } else {
+                        console.log("No Matches Found");
+                    }
+
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+
+        });
+
+    };
 
 };
 
 
-// ----------- AJAX ----------- //
+
 
 // Uber
 var uberClientID = 'cjKN8yPx-XUsLw1Z77bywimofddFMaDQ',
-  uberServerToken = 'fOLxOsSYP0wFnCeJE8mV1KZSS5643TNaWuqnuPWT';
+    uberServerToken = 'fOLxOsSYP0wFnCeJE8mV1KZSS5643TNaWuqnuPWT';
 
 //Query UBER API if needed
-//getUberForUserLocation(locationData[0].lat, locationData[0].lng); // Passing in lat and lng of one location for test purposes
 
-function getUberForUserLocation(latitude, longitude) {
-  $.ajax({
+$.ajax({
     url: "https://api.uber.com/v1/products",
     headers: {
-      Authorization: "Token " + uberServerToken
+        Authorization: "Token " + uberServerToken
     },
     dataType: "json",
     data: {
-      latitude: latitude,
-      longitude: longitude
+        latitude: locationData[0].lat,
+        longitude: locationData[0].lng
     },
     success: function(result) {
-      //console.log(result);
-      callback(result.products);
-      //console.log(callback(result.products)); // <-- Up to here I get the results I need
-      //console.log(result.products);
+        result = result.products;
+        var uberResults = '';
+        for (var i = 0; i < result.length; i++) {
+            name = result[i].display_name;
+            console.log(name);
+            image = result[i].image;
+
+            if (result[i].price_details !== null) {
+                var priceDetails = result[i].price_details;
+                var costMin = priceDetails.cost_per_minute;
+                var costDistance = priceDetails.cost_per_distance;
+                var minFare = priceDetails.minimum;
+
+                //zaraza += name + image + costMin + costDistance + minFare;
+            }
+        }
     },
     error: function(error) {
-      console.log("Uber cannot be contacted");
+        zaraza += '<h4>' + 'Uber API could not be loaded' + '</h4>';
+        console.log("Uber cannot be contacted" + error);
     }
 
-  });
+});
 
-  function callback(result) {
-    //console.log(result.length);
-    var uberResults = '';
-    for (var i = 0; i < result.length; i++) {
-      name = result[i].display_name;
-      image = result[i].image;
 
-      if (result[i].price_details !== null) {
-        priceDetails = result[i].price_details;
-        costMin = priceDetails.cost_per_minute;
-        costDistance = priceDetails.cost_per_distance;
-        minFare = priceDetails.minimum;
-        //console.log(name, image, costMin, costDistance, minFare);
-      }
-      uberResults += '<div>';
-      uberResults += '<h6>' + 'Service: ' + name + '</h6>';
-      uberResults += '<img src="'+ image + '">';
-      uberResults += '<h6>' + 'Cost per minute: $' + costMin + '</h6>';
-      uberResults += '<h6>' + 'Cost per mile: $' + costDistance + '</h6>';
-      uberResults += '<h6>' + 'Minimumin Fare: $'+ minFare + '</h6>';
-      uberResults += '</div>';
-      //console.log(uberResults);
-    }
-    //console.log(uberResults); // If you uncomment this you will see the results on the console
-    return(uberResults); // This is my return statment for getUberForUserLocation
-  }
-}
+
+
+
+
 
 // Make the viewModel go!
 ko.applyBindings(new viewModel());
+
+
+
+function callback(result) {
+    result = result.products;
+    var uberResults = [];
+    for (var i = 0; i < result.length; i++) {
+        name = result[i].display_name;
+        console.log(name);
+        image = result[i].image;
+
+        if (result[i].price_details !== null) {
+            var priceDetails = result[i].price_details;
+            var costMin = priceDetails.cost_per_minute;
+            var costDistance = priceDetails.cost_per_distance;
+            var minFare = priceDetails.minimum;
+
+            uberResults = [name, image, costMin, costDistance, minFare];
+            $('#uber').html(uberResults);
+        }
+    }
+    return uberResults;
+}
