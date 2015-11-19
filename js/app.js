@@ -140,7 +140,11 @@ var viewModel = function() {
         // Pan to coordinates
         self.map.panTo(venue.coordinates);
 
+
         // Set the Info Window
+        self.infoWindow.setContent(self.contentBox(venue));
+
+        // Open the Info Window
         self.infoWindow.open(self.map, venue.marker);
 
         // Use an IIFE to make markers dance ^_^
@@ -156,12 +160,27 @@ var viewModel = function() {
             // Close Info Window Automatically after 2 seconds // UX Note: This might be annoying for some users
             setTimeout(function() {
                 self.infoWindow.close();
-            }, 2000);
+            }, 50000);
         })();
 
     };
 
 
+    self.contentBox = function(results) {
+
+        console.log(results[0]);
+
+        var box = '<div id="box">';
+        box += '<h2>API Information:</h2>';
+        box += '<img id="foursquare" src="images/foursquare-wordmark.png" alt="foursqaure logo">';
+        box += '<h5>' + results[0] + '</h5>';
+
+        box += '</div>';
+
+
+
+        return box;
+    };
 
 
     // Beign with Knockout Stuff
@@ -214,13 +233,23 @@ var viewModel = function() {
             success: function(data) {
                 console.log(data.response.venues);
                 results = data.response.venues;
+
+                var name, url, phone, address, twitter, foursquareResults;
                 for (var i = 0; i < results.length; i++){
-                    if (results[i].name === venue.name){
-                        console.log(results[i].name);
-                        console.log(results[i].url);
-                        console.log(results[i].contact.formattedPhone);
-                        console.log(results[i].location.address);
+                    if (results[i].name === venue.name) {
+                        name = results[i].name; // TODO Make a While so it checks for stuff that is not defined in the foursqaure object
+                        url = results[i].url;
+                        phone = results[i].contact.formattedPhone;
+                        address = results[i].location.address;
+                        twitter = results[i].contact.twitter;
                         console.log(results[i].contact.twitter);
+                        foursquareResults = [name, address, phone, url,twitter];
+
+                        self.contentBox(foursquareResults);
+                        console.log(foursquareResults);
+                        console.log(foursquareResults[0]);
+
+
 
                     } else {
                         console.log("No Matches Found");
