@@ -62,6 +62,11 @@ form {
 	width 15%;
 }
 
+#foursquare {
+	height: 25px;
+	width: auto;
+}
+
 a {
 	color: #00b0ff;
 }
