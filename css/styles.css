@@ -12,12 +12,8 @@ form {
 	padding-left: 0;
 }
 
-.button {
-    background-image: url('../images/UBER_API_Button_2x_Grey_2px_round.png');
-    background-size: cover;
-    width: 280px;
-    height: 44px;
-    margin: 0 auto;
+h6 {
+	padding-left: 2px;
 }
 
 .fixed {
