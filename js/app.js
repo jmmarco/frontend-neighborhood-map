@@ -62,6 +62,8 @@ var locationData = [{
 }];
 
 
+
+
 // ----------- View Model ----------- //
 var viewModel = function() {
     // Create a reference to 'this'
@@ -75,10 +77,11 @@ var viewModel = function() {
             lat: data.lat,
             lng: data.lng
         };
-        self.tag = data.tag;
-        self.marker = null; // I don't think I really need these here
-        self.infoWindow = null; // I don't think I really need these here
-        //console.log(self.coordinates, self.tag, self.name, self.marker, self.infoWindow);
+        // To be populated by Foursquare API
+        self.address = null;
+        self.phone = null;
+        self.url = null;
+
     }
 
 
@@ -115,14 +118,14 @@ var viewModel = function() {
             title: venue.name
         };
 
+
         console.log(venue.coordinates.lat);
         // Create the marker
         venue.marker = new google.maps.Marker(markerOptions);
 
         // Add a 'click' event listener for each marker
-        venue.marker.addListener('click', function(){
+        venue.marker.addListener('click', function() {
             self.clickHandler(venue);
-            self.foursquare(venue);
         });
 
 
@@ -166,15 +169,18 @@ var viewModel = function() {
     };
 
 
-    self.contentBox = function(results) {
+    self.contentBox = function(venue) {
 
-        console.log(results[0]);
+        console.log(venue);
 
         var box = '<div id="box">';
-        box += '<h2>API Information:</h2>';
+        box += '<h2>' + venue.name + '</h2>';
+        box += '<h5>' + 'Venue Information provided by: ' + '</h5>';
         box += '<img id="foursquare" src="images/foursquare-wordmark.png" alt="foursqaure logo">';
-        box += '<h5>' + results[0] + '</h5>';
-
+        box += '<h6>' + '<i class="fa fa-map-marker fa-lg"></i>' + '  ' + venue.address + '</h6>';
+        box += '<h6>' + '<i class="fa fa-phone fa-lg"></i>' + '  ' + venue.phone + '</h6>';
+        box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + venue.url + '</h6>';
+        box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + venue.twitter + '</h6>';
         box += '</div>';
 
 
@@ -213,132 +219,71 @@ var viewModel = function() {
 
     // ----------- AJAX ----------- //
 
-    self.foursquare = function(venue) {
-        // Foursquare
-        // https://api.foursquare.com/v2/venues/search?client_id=C5SM22PLTAYUAFJZP0YGUJCL0KKHD4U2PAMFEEKF3KGNSTEL&client_secret=ZY0KAMOMLB13YYA55ZKJPZAUFL5L3O3HVKWCM2ZRIVW1GOZW&v=20130815%20&ll=40.7,-74%20&query=sushi
+    self.foursquare = function() { // TODO: Change to IIFE
 
-        var config = {
-            clientId: 'C5SM22PLTAYUAFJZP0YGUJCL0KKHD4U2PAMFEEKF3KGNSTEL',
-            clientSecret: 'ZY0KAMOMLB13YYA55ZKJPZAUFL5L3O3HVKWCM2ZRIVW1GOZW',
-            authUrl: 'https://foursquare.com/',
-            apiUrl: 'https://api.foursquare.com/v2/venues/search',
-            version: 'v=20140806'
-        };
+        //console.log(self.allLocations);
 
-        $.ajax({
-            url: config.apiUrl,
-            data: 'client_id=' + config.clientId + '&' + 'client_secret=' + config.clientSecret + '&' + config.version + '&' + 'll=' + venue.coordinates.lat + ',' + venue.coordinates.lng,
-            dataType: 'json',
-
-            success: function(data) {
-                console.log(data.response.venues);
-                results = data.response.venues;
-
-                var name, url, phone, address, twitter, foursquareResults;
-                for (var i = 0; i < results.length; i++){
-                    if (results[i].name === venue.name) {
-                        name = results[i].name; // TODO Make a While so it checks for stuff that is not defined in the foursqaure object
-                        url = results[i].url;
-                        phone = results[i].contact.formattedPhone;
-                        address = results[i].location.address;
-                        twitter = results[i].contact.twitter;
-                        console.log(results[i].contact.twitter);
-                        foursquareResults = [name, address, phone, url,twitter];
-
-                        self.contentBox(foursquareResults);
-                        console.log(foursquareResults);
-                        console.log(foursquareResults[0]);
+        self.allLocations.forEach(function(venue) {
+            //console.log(venue);
+            //console.log(venue.coordinates);
+            //console.log(venue.url);
 
 
+            var config = {
+                clientId: 'C5SM22PLTAYUAFJZP0YGUJCL0KKHD4U2PAMFEEKF3KGNSTEL',
+                clientSecret: 'ZY0KAMOMLB13YYA55ZKJPZAUFL5L3O3HVKWCM2ZRIVW1GOZW',
+                authUrl: 'https://foursquare.com/',
+                apiUrl: 'https://api.foursquare.com/v2/venues/search',
+                version: 'v=20140806'
+            };
 
-                    } else {
-                        console.log("No Matches Found");
+            $.ajax({
+                url: config.apiUrl,
+                data: 'client_id=' + config.clientId + '&' + 'client_secret=' + config.clientSecret + '&' + config.version + '&' + 'll=' + venue.coordinates.lat + ',' + venue.coordinates.lng,
+                dataType: 'json',
+
+                success: function(data) {
+                    // Put Foursquare info into a variable
+                    results = data.response.venues;
+
+                    // Iterate through those results
+                    for (var i = 0; i < results.length; i++) {
+
+                        // Make names lowercase
+                        orignalName = venue.name.toLowerCase();
+                        foursquareName = results[i].name.toLowerCase();
+
+                        // Venue validation
+                        if (foursquareName === orignalName) {
+                            name = results[i].name; // TODO Make a While so it checks for stuff that is not defined in the foursqaure object
+
+                            venue.url = results[i].url;
+                            venue.phone = results[i].contact.formattedPhone;
+                            venue.address = results[i].location.address;
+                            venue.twitter = twitter = results[i].contact.twitter;
+
+
+                            console.log(venue);
+                        }
+
+                         /*else {
+                            console.log("No Matches Found");
+                        } */
+
                     }
-
+                },
+                error: function(data) {
+                    console.log(data);
                 }
-            },
-            error: function(data) {
-                console.log(data);
-            }
+
+            });
 
         });
-
     };
+    self.foursquare();
 
 };
 
 
-
-
-// Uber
-var uberClientID = 'cjKN8yPx-XUsLw1Z77bywimofddFMaDQ',
-    uberServerToken = 'fOLxOsSYP0wFnCeJE8mV1KZSS5643TNaWuqnuPWT';
-
-//Query UBER API if needed
-
-$.ajax({
-    url: "https://api.uber.com/v1/products",
-    headers: {
-        Authorization: "Token " + uberServerToken
-    },
-    dataType: "json",
-    data: {
-        latitude: locationData[0].lat,
-        longitude: locationData[0].lng
-    },
-    success: function(result) {
-        result = result.products;
-        var uberResults = '';
-        for (var i = 0; i < result.length; i++) {
-            name = result[i].display_name;
-            console.log(name);
-            image = result[i].image;
-
-            if (result[i].price_details !== null) {
-                var priceDetails = result[i].price_details;
-                var costMin = priceDetails.cost_per_minute;
-                var costDistance = priceDetails.cost_per_distance;
-                var minFare = priceDetails.minimum;
-
-                //zaraza += name + image + costMin + costDistance + minFare;
-            }
-        }
-    },
-    error: function(error) {
-        zaraza += '<h4>' + 'Uber API could not be loaded' + '</h4>';
-        console.log("Uber cannot be contacted" + error);
-    }
-
-});
-
-
-
-
-
-
-
 // Make the viewModel go!
 ko.applyBindings(new viewModel());
-
-
-
-function callback(result) {
-    result = result.products;
-    var uberResults = [];
-    for (var i = 0; i < result.length; i++) {
-        name = result[i].display_name;
-        console.log(name);
-        image = result[i].image;
-
-        if (result[i].price_details !== null) {
-            var priceDetails = result[i].price_details;
-            var costMin = priceDetails.cost_per_minute;
-            var costDistance = priceDetails.cost_per_distance;
-            var minFare = priceDetails.minimum;
-
-            uberResults = [name, image, costMin, costDistance, minFare];
-            $('#uber').html(uberResults);
-        }
-    }
-    return uberResults;
-}
