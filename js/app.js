@@ -1,4 +1,5 @@
 // ----------- Locations ----------- //
+
 var locationData = [{
     name: 'Comedy Cellar',
     tag: 'comedy',
@@ -65,6 +66,7 @@ var locationData = [{
 
 
 // ----------- View Model ----------- //
+
 var viewModel = function() {
     // Create a reference to 'this'
     var self = this;
@@ -81,6 +83,7 @@ var viewModel = function() {
         self.address = null;
         self.phone = null;
         self.url = null;
+        self.apiError = null;
 
     }
 
@@ -110,11 +113,13 @@ var viewModel = function() {
 
     // Create an array to hold each venue
     self.allLocations = [];
+
+    // Push all the venues into the new array
     locationData.forEach(function(venue) {
         self.allLocations.push(new Venue(venue));
     });
-    //console.log(self.allLocations);
 
+    // Create a marker for each venue
     self.allLocations.forEach(function(venue) {
         // Set the options for the marker
         var markerOptions = {
@@ -124,18 +129,13 @@ var viewModel = function() {
             title: venue.name
         };
 
-
-        console.log(venue.coordinates.lat);
         // Create the marker
         venue.marker = new google.maps.Marker(markerOptions);
 
-        // Add a 'click' event listener for each marker
+        // Add event listener for each marker
         venue.marker.addListener('click', function() {
             self.clickHandler(venue);
         });
-
-
-
     });
 
 
@@ -147,7 +147,6 @@ var viewModel = function() {
 
         // Pan to coordinates
         self.map.panTo(venue.coordinates);
-
 
         // Set the Info Window
         self.infoWindow.setContent(self.contentBox(venue));
@@ -171,13 +170,12 @@ var viewModel = function() {
                 self.map.setZoom(12);
             }, 5000);
         })();
-
     };
 
-
+    // Create a nice box for Info Window content
     self.contentBox = function(venue) {
 
-        var details = [venue.name, venue.address, venue.phone, venue.url, venue.twitter];
+        var details = [venue.name, venue.address, venue.phone, venue.url, venue.twitter, venue.apiError];
         var box;
 
         // Find any undefined fields and insert appropiate message
@@ -187,17 +185,25 @@ var viewModel = function() {
             }
         }
 
-        // Create a nice box to display inside of Info Window
-        box = '<div id="box">';
-        box += '<h2>' + details[0] + '</h2>';
-        box += '<h5>' + 'Venue Information provided by: ' + '</h5>';
-        box += '<img id="foursquare" src="images/foursquare-wordmark.png" alt="foursqaure logo">';
-        box += '<h6>' + '<i class="fa fa-map-marker fa-lg"></i>' + '  ' + details[1] + '</h6>';
-        box += '<h6>' + '<i class="fa fa-phone fa-lg"></i>' + '  ' + details[2] + '</h6>';
-        box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + details[3] + '</h6>';
-        box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + details[4]+ '</h6>';
-        box += '</div>';
-
+        // Check if the venue information was populated
+        if (venue.apiError === null) {
+            box = '<div id="box">';
+            box += '<h2>' + details[0] + '</h2>';
+            box += '<h5>' + 'Venue Information provided by: ' + '</h5>';
+            box += '<img id="foursquare" src="images/foursquare-wordmark.png" alt="foursqaure logo">';
+            box += '<h6>' + '<i class="fa fa-map-marker fa-lg"></i>' + '  ' + details[1] + '</h6>';
+            box += '<h6>' + '<i class="fa fa-phone fa-lg"></i>' + '  ' + details[2] + '</h6>';
+            box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + details[3] + '</h6>';
+            box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + details[4] + '</h6>';
+            box += '</div>';
+        } else {
+            box = box = '<div id="box">';
+            box += '<h2>' + details[0] + '</h2>';
+            box += '<img id="foursquare" src="images/foursquare-wordmark.png" alt="foursqaure logo">';
+            box += '<h4>' + '<i class="fa fa-exclamation-triangle fa-lg"></i>' + venue.apiError + '</h4>';
+            box += '<h5>' + 'Check your internet connection' + '</h5>';
+            box += '</div>';
+        }
         return box;
     };
 
@@ -232,35 +238,30 @@ var viewModel = function() {
         });
     };
 
-
-
     // ----------- AJAX ----------- //
 
     (function() {
 
-        //console.log(self.allLocations);
-
         self.allLocations.forEach(function(venue) {
-            //console.log(venue);
-            //console.log(venue.coordinates);
-            //console.log(venue.url);
 
-
+            // Store the required configuration
             var config = {
                 clientId: 'C5SM22PLTAYUAFJZP0YGUJCL0KKHD4U2PAMFEEKF3KGNSTEL',
                 clientSecret: 'ZY0KAMOMLB13YYA55ZKJPZAUFL5L3O3HVKWCM2ZRIVW1GOZW',
                 authUrl: 'https://foursquare.com/',
                 apiUrl: 'https://api.foursquare.com/v2/venues/search',
-                version: 'v=20140806'
+                version: 'v=20140806',
+                error: 'The Foursquare API could not be reached'
             };
 
+            // Make the AJAX request
             $.ajax({
                 url: config.apiUrl,
                 data: 'client_id=' + config.clientId + '&' + 'client_secret=' + config.clientSecret + '&' + config.version + '&' + 'll=' + venue.coordinates.lat + ',' + venue.coordinates.lng,
                 dataType: 'json',
 
                 success: function(data) {
-                    // Put Foursquare info into a variable
+                    // Put Foursquare response into a variable
                     results = data.response.venues;
 
                     // Iterate through those results
@@ -272,19 +273,18 @@ var viewModel = function() {
 
                         // Venue validation
                         if (foursquareName === orignalName) {
-                            name = results[i].name; // TODO Make a While so it checks for stuff that is not defined in the foursqaure object
-
+                            name = results[i].name;
                             venue.url = results[i].url;
                             venue.phone = results[i].contact.formattedPhone;
                             venue.address = results[i].location.address;
                             venue.twitter = twitter = results[i].contact.twitter;
 
                         }
-
                     }
                 },
                 error: function(data) {
-                    venue.name = data;
+                    // Raise an error if Foursquare can not be reached
+                    venue.apiError = config.error;
                 }
 
             });
