@@ -39,10 +39,17 @@ Thumbs.db
 # Bower Packages #
 ##################
 bower_components
+
+# npm Packages #
+################
+node_modules
+
+# Test folders #
+################
 places
 
 # Test files
 js/test.js
 css/style.css
 test.html
-js/ajax.js
+js/ajax.jss
