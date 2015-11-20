@@ -87,19 +87,25 @@ var viewModel = function() {
 
     // Set the options for the map
     var mapOptions = {
-        zoom: 17,
+        zoom: 12,
         center: {
             lat: 40.7289325,
             lng: -73.998362
         },
+        disableDefaultUI: true
     };
 
 
     // Create the map
     self.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    // Create the InfoWindow
+    // Create the Info Window
     self.infoWindow = new google.maps.InfoWindow();
+
+    // Zoom out when Info Window is closed
+    self.infoWindow.addListener('closeclick', function() {
+        self.map.setZoom(12);
+    });
 
 
     // Create an array to hold each venue
@@ -130,7 +136,6 @@ var viewModel = function() {
 
 
 
-
     });
 
 
@@ -138,7 +143,7 @@ var viewModel = function() {
     self.clickHandler = function(venue) {
 
         // Zoom in a bit
-        self.map.setZoom(18);
+        self.map.setZoom(16);
 
         // Pan to coordinates
         self.map.panTo(venue.coordinates);
@@ -160,10 +165,11 @@ var viewModel = function() {
                     venue.marker.setAnimation(null);
                 }, 700); // Default timeout that Google Maps uses for it's markers
             }
-            // Close Info Window Automatically after 2 seconds // UX Note: This might be annoying for some users
+            // Close Info Window Automatically after 5 seconds // UX Note: This might be annoying for some users
             setTimeout(function() {
                 self.infoWindow.close();
-            }, 50000);
+                self.map.setZoom(12);
+            }, 5000);
         })();
 
     };
@@ -171,19 +177,26 @@ var viewModel = function() {
 
     self.contentBox = function(venue) {
 
-        console.log(venue);
+        var details = [venue.name, venue.address, venue.phone, venue.url, venue.twitter];
+        var box;
 
-        var box = '<div id="box">';
-        box += '<h2>' + venue.name + '</h2>';
+        // Find any undefined fields and insert appropiate message
+        for (var i = 0; i < details.length; i++) {
+            if (details[i] === undefined) {
+                details[i] = 'Not provided';
+            }
+        }
+
+        // Create a nice box to display inside of Info Window
+        box = '<div id="box">';
+        box += '<h2>' + details[0] + '</h2>';
         box += '<h5>' + 'Venue Information provided by: ' + '</h5>';
         box += '<img id="foursquare" src="images/foursquare-wordmark.png" alt="foursqaure logo">';
-        box += '<h6>' + '<i class="fa fa-map-marker fa-lg"></i>' + '  ' + venue.address + '</h6>';
-        box += '<h6>' + '<i class="fa fa-phone fa-lg"></i>' + '  ' + venue.phone + '</h6>';
-        box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + venue.url + '</h6>';
-        box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + venue.twitter + '</h6>';
+        box += '<h6>' + '<i class="fa fa-map-marker fa-lg"></i>' + '  ' + details[1] + '</h6>';
+        box += '<h6>' + '<i class="fa fa-phone fa-lg"></i>' + '  ' + details[2] + '</h6>';
+        box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + details[3] + '</h6>';
+        box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + details[4]+ '</h6>';
         box += '</div>';
-
-
 
         return box;
     };
@@ -205,8 +218,12 @@ var viewModel = function() {
         self.allLocations.forEach(function(venue) {
             venue.marker.setVisible(false);
 
-            if (venue.name.toLowerCase().indexOf(searchInput) !== -1 || venue.tag.toLowerCase().indexOf(searchInput) !== -1) {
+            if (venue.name.toLowerCase().indexOf(searchInput) !== -1) {
                 self.visibleVenues.push(venue);
+                venue.marker.setAnimation(google.maps.Animation.BOUNCE);
+                setTimeout(function() {
+                    venue.marker.setAnimation(null);
+                }, 700);
             }
         });
 
@@ -219,7 +236,7 @@ var viewModel = function() {
 
     // ----------- AJAX ----------- //
 
-    self.foursquare = function() { // TODO: Change to IIFE
+    (function() {
 
         //console.log(self.allLocations);
 
@@ -262,25 +279,18 @@ var viewModel = function() {
                             venue.address = results[i].location.address;
                             venue.twitter = twitter = results[i].contact.twitter;
 
-
-                            console.log(venue);
                         }
-
-                         /*else {
-                            console.log("No Matches Found");
-                        } */
 
                     }
                 },
                 error: function(data) {
-                    console.log(data);
+                    venue.name = data;
                 }
 
             });
 
         });
-    };
-    self.foursquare();
+    })();
 
 };
 
