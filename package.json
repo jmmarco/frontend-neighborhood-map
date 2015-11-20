@@ -1,0 +1,22 @@
+{
+  "name": "frontend-neighborhood-map",
+  "version": "1.0.0",
+  "description": "map of my favorite neighborhood with search functionality, dynamic markers and third-party data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmmarco/frontend-neighborhood-map.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "",
+  "dependencies": {
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {
+    "grunt-contrib-concat": "^0.5.1"
+  }
+}
