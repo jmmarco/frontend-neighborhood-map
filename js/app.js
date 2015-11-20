@@ -7,7 +7,7 @@ var locationData = [{
     lng: -74.00057400000003,
     marker: null
 }, {
-    name: 'Carolines on Brodway',
+    name: 'Carolines on Broadway',
     tag: 'comedy',
     lat: 40.761051,
     lng: -73.98407299999997,
@@ -271,6 +271,8 @@ var viewModel = function() {
                         orignalName = venue.name.toLowerCase();
                         foursquareName = results[i].name.toLowerCase();
 
+                        console.log('Original name: ', orignalName);
+                        console.log('Foursquare name: ', foursquareName);
                         // Venue validation
                         if (foursquareName === orignalName) {
                             name = results[i].name;
