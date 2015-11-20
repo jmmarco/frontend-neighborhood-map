@@ -1,0 +1,68 @@
+/* TODO: Organize CSS */
+
+body {
+	font-family: sans-serif;
+	color: gray;
+	margin: 20px;
+	background-color: #375F6B;
+}
+
+form {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+h6 {
+	padding-left: 2px;
+}
+
+.fixed {
+	position: fixed;
+	z-index: 1;
+}
+
+.form-control {
+}
+
+.main-title {
+	font-size: 48px;
+}
+
+.main-logo {
+	padding-top: 15px;
+}
+
+.placeholder {
+	margin-top: 10px;
+}
+
+.navbar-form {
+	padding: 0;
+}
+
+#map {
+	height: 1000px;
+	width: auto;
+	border-radius: 0.5%;
+
+}
+
+#time {
+    text-align: right;
+    margin-top: 0;
+    padding-top: 10px;
+    padding-right: 10px;
+}
+
+#uber-icon {
+	width 15%;
+}
+
+#foursquare {
+	height: 25px;
+	width: auto;
+}
+
+a {
+	color: #00b0ff;
+}

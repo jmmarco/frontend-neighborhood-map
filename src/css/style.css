@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100%;
+}
+
+input {
+  position: fixed;
+  right: 20px;
+  bottom: 30%;
+  height: 40px;
+  width: 200px;
+  font-size: 20px;
+}
+
+#list-view {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-left: 20px;
+  padding: 2px 0;
+  font: 12px sans-serif;
+}
