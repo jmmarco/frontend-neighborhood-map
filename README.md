@@ -7,8 +7,8 @@ This is an application that helps you find local business and places in your loc
 
 API's
 
-- UBER API
-This returns the available UBER products for a given location
+- Foursquare API
+This returns the available venue information for a given location
 
 ## Quickstart
 
@@ -48,9 +48,11 @@ python -m SimpleHTTPServer 8000
 - [Relate markers to each location](https://discussions.udacity.com/t/i-cant-get-the-markers-to-change-based-on-the-search-query/15443/5)
 - [Remove markers](https://developers.google.com/maps/documentation/javascript/examples/marker-remove)
 - [Defining Locations for Map](https://discussions.udacity.com/t/defining-locations-for-map/33823/5)
+- [Configure a persistent web server with Grunt](http://danburzo.ro/grunt/chapters/server/)
+- [Customizing Google Maps: Custom Markers](https://developers.google.com/maps/tutorials/customizing/custom-markers#customize_marker_icons_for_different_markers)
 
 
-### Questions 1 on 1 with JohnMav
+### Questions 1 on 1 with Udacity Coach
 
 - Separation of concerns, viewModel, map Function etc - KO Computed (when to use them)
 - Markers, do I need to define a marker variable on each hardcoded location?
