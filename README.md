@@ -1,43 +1,34 @@
 # Neighborhood Map
-This is an application that helps you find local business and places in your local neighborhood.
-
-- Homepage:
-- Source:
-
+This is an application that helps you find local business and places in your local neighborhood
 
 API's
 
 - Foursquare API
 This returns the available venue information for a given location
+- Wikipedia API
+Returns a list of articles that closely match each venue
 
-## Quickstart
+Requirements:
+- Node
+- Grunt
 
 
-- Clone the repository - `git clone https://github.com/jmmarco/frontend-neighborhood-map.git`
-- Install dependencies using Bower - `bower install`
-- Open `index.html`
+## How to run:
+1. Clone the repository - `git clone repository_name.git`
+2. To run the project run `grunt default`, This will build the project and launch it automatically for you in your default Browser
+3. The application will open in a new window
 
-
+Tip: If you need to stop the server hit "CTRL + C"
+You can reactivate the server running the standalone task:
+```
+grunt connect
+```
 
 ### Dependencies:
-
- - KnockoutJS
- - Google Maps API
- - jQuery
- - Bootstrap
-
-
-
-## Installation
-To install the project use [bower](http://bower.io/) package manager
-To run the app: Run a local webserver on port 8000:
-
-Tip: You can use Python's Simple HTTP Server. Like this:
-```
-python -m SimpleHTTPServer 8000
-```
-
-
+- KnockoutJS
+- Google Maps API
+- jQuery
+- Bootstrap
 
 
 ### Acknowledgments
@@ -50,6 +41,7 @@ python -m SimpleHTTPServer 8000
 - [Defining Locations for Map](https://discussions.udacity.com/t/defining-locations-for-map/33823/5)
 - [Configure a persistent web server with Grunt](http://danburzo.ro/grunt/chapters/server/)
 - [Customizing Google Maps: Custom Markers](https://developers.google.com/maps/tutorials/customizing/custom-markers#customize_marker_icons_for_different_markers)
+- [Inspiration for click handler](https://github.com/tomsmoker/NeighbourhoodMap/blob/master/js/app.js)
 
 
 ### Questions 1 on 1 with Udacity Coach
