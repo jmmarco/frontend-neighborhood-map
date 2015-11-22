@@ -251,12 +251,50 @@ var viewModel = function() {
         return box;
     };
 
+
+    // ----------- Knockout JS ----------- //
+
+    self.visibleVenues = ko.observableArray();
+
+    self.allLocations.forEach(function(venue) {
+        self.visibleVenues.push(venue);
+    });
+
+    self.userInput = ko.observable('');
+
+    self.filterMarkers = function() {
+        var searchInput = self.userInput().toLowerCase();
+        self.visibleVenues.removeAll();
+
+        self.allLocations.forEach(function(venue) {
+            venue.marker.setVisible(false);
+
+            if (venue.name.toLowerCase().indexOf(searchInput) !== -1) {
+                self.visibleVenues.push(venue);
+                venue.marker.setAnimation(google.maps.Animation.BOUNCE);
+                setTimeout(function() {
+                    venue.marker.setAnimation(null);
+                }, 700);
+            }
+        });
+
+        self.visibleVenues().forEach(function(venue) {
+            venue.marker.setVisible(true);
+        });
+    };
+
+    // ----------- End of Knockout JS ----------- //
+
+    // ----------- AJAX ----------- //
+
+    // Wikipedia API
     self.wikipedia = function(venue) {
         wHeader = '<li class="list-group-item">Wikipedia Articles<i class="fa fa-wikipedia-w fa-2x"></i></li>';
         $('#wikipedia').append(wHeader);
 
         var wikipediaURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + venue.name + '&format=json&callback=wikiCallback';
 
+        // Make the AJAX request
         $.ajax({
             timeout: 1000, // Cleaner way to handle timeouts. See http://stackoverflow.com/questions/3543683/determine-if-ajax-error-is-a-timeout
             error: function() {
@@ -289,44 +327,11 @@ var viewModel = function() {
 
     };
 
-
-    // Beign with Knockout Stuff
-    self.visibleVenues = ko.observableArray();
-
-    self.allLocations.forEach(function(venue) {
-        self.visibleVenues.push(venue);
-    });
-
-    self.userInput = ko.observable('');
-
-    self.filterMarkers = function() {
-        var searchInput = self.userInput().toLowerCase();
-        self.visibleVenues.removeAll();
-
-        self.allLocations.forEach(function(venue) {
-            venue.marker.setVisible(false);
-
-            if (venue.name.toLowerCase().indexOf(searchInput) !== -1) {
-                self.visibleVenues.push(venue);
-                venue.marker.setAnimation(google.maps.Animation.BOUNCE);
-                setTimeout(function() {
-                    venue.marker.setAnimation(null);
-                }, 700);
-            }
-        });
-
-        self.visibleVenues().forEach(function(venue) {
-            venue.marker.setVisible(true);
-        });
-    };
-
-    // ----------- AJAX ----------- //
-
+    // Foursquare API
     (function() {
 
         self.allLocations.forEach(function(venue) {
 
-            // Foursquare configuration
             var config = {
                 clientId: 'C5SM22PLTAYUAFJZP0YGUJCL0KKHD4U2PAMFEEKF3KGNSTEL',
                 clientSecret: 'ZY0KAMOMLB13YYA55ZKJPZAUFL5L3O3HVKWCM2ZRIVW1GOZW',
@@ -360,7 +365,6 @@ var viewModel = function() {
                             venue.phone = results[i].contact.formattedPhone;
                             venue.address = results[i].location.address;
                             venue.twitter = twitter = results[i].contact.twitter;
-
                         }
                     }
                 },
@@ -368,15 +372,14 @@ var viewModel = function() {
                     // Raise an error if Foursquare can not be reached
                     venue.apiError = config.error;
                 }
-
             });
         });
-
-
     })();
 
-};
+    // ----------- End of AJAX ----------- //
 
+};
+// ----------- End of View Model ----------- //
 
 // Make the viewModel go!
 ko.applyBindings(new viewModel());
