@@ -94,10 +94,11 @@ var viewModel = function() {
     var mapOptions = {
         zoom: 12,
         center: {
-            lat: 40.7289325,
-            lng: -73.998362
+            lat: 40.7236458,
+            lng: -73.9500978
         },
-        disableDefaultUI: true
+        disableDefaultUI: true,
+        scaleControl: false
     };
 
     // Create a icon storage for markers
@@ -194,7 +195,7 @@ var viewModel = function() {
         self.infoWindow.open(self.map, venue.marker);
 
         // Call the Panoramio API
-        self.panoramio(venue);
+        self.wikipedia(venue);
 
         // Use an IIFE to make markers dance ^_^
         (function() {
@@ -210,6 +211,7 @@ var viewModel = function() {
             setTimeout(function() {
                 self.infoWindow.close();
                 self.map.setZoom(12);
+                $('#wikipedia').empty(); // clear out current article from window
             }, 5000);
         })();
     };
@@ -249,13 +251,42 @@ var viewModel = function() {
         return box;
     };
 
-    self.panoramio = function(venue) {
-        var tag = venue.name;
-        var content = '<iframe src="http://www.panoramio.com/wapi/template/list.html?tag=' +
-        tag + '&amp;width=100&amp;height=100&amp;columns=10&amp;rows=1&amp;orientation=vertical"' +
-        ' frameborder="0" width="100" height="100" scrolling="yes" marginwidth="0" marginheight="0"></iframe>';
+    self.wikipedia = function(venue) {
+        wHeader = '<li class="list-group-item">Wikipedia Articles<i class="fa fa-wikipedia-w fa-2x"></i></li>';
+        $('#wikipedia').append(wHeader);
 
-        $('#panoramio').html(content);
+        var wikipediaURL = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + venue.name + '&format=json&callback=wikiCallback';
+
+        $.ajax({
+            timeout: 1000, // Cleaner way to handle timeouts. See http://stackoverflow.com/questions/3543683/determine-if-ajax-error-is-a-timeout
+            error: function() {
+                console.log("The request timed out");
+                $('#wikipedia').text("Failed to get Wikipedia resources");
+            },
+            url: wikipediaURL,
+            dataType: "jsonp",
+            success: function(response) {
+                console.log(response);
+                var articleList = response[1];
+                console.log(articleList);
+                console.log(venue.name);
+
+
+                var articleStr;
+                for (var i = 0; i < articleList.length; i++) {
+                    articleStr = articleList[i];
+                    if (articleStr !== '') {
+                        var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+                        wResults = '<li class="list-group-item"><a href="' + url + ' ' + 'target="_blank">' + articleStr + '</a></li>';
+                        $('#wikipedia').append(wResults);
+                    } else {
+                        $('#wikipedia').append('No results available');
+                    }
+
+                }
+            }
+        });
+
     };
 
 
@@ -340,35 +371,6 @@ var viewModel = function() {
 
             });
         });
-
-        self.allLocations.forEach(function(venue) {
-
-
-            /*$.ajax({
-                url: 'http://www.panoramio.com/map/get_panoramas.php?order=popularity&set=public&from=0&to=10&minx=' +
-                    venue.coordinates.lng + '&miny=' + venue.coordinates.lat + '&maxx=' + (venue.coordinates.lng + 0.2) + '&maxy=' + (venue.coordinates.lat+ 0.2) + '&size=small',
-                type: 'GET',
-                dataType: 'jsonp',
-                success: function(response) {
-                    photos = response.photos;
-                    console.log(photos);
-                    for (var i = 0; i < photos.length; i++) {
-                        photoTitles = photos[i].photo_title.toLowerCase();
-                        //console.log(photoTitles);
-                        if (photoTitles === venue.name) {
-                            $('#panoramio').html('<img src=" ' + photos[i].photo_title + '">');
-                        } else {
-                            $('#panoramio').html('<h3>No photos found for venue</h3>');
-                        }
-                    }
-
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            }); */
-
-        }); // end of loop
 
 
     })();
