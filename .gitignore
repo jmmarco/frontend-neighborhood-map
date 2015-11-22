@@ -50,6 +50,5 @@ places
 
 # Test files
 js/test.js
-css/style.css
 test.html
 js/ajax.jss
