@@ -5,15 +5,23 @@ module.exports = function(grunt) {
 
         pkg: grunt.file.readJSON('package.json'),
 
+        // Copy image structure
+        copy: {
+            main: {
+                src: 'images/*',
+                dest: 'dist/',
+            },
+        },
+
         // Minify HTML
-        htmlmin: { // Task
-            dist: { // Target
-                options: { // Target options
+        htmlmin: {
+            dist: {
+                options: {
                     removeComments: true,
                     collapseWhitespace: true
                 },
-                files: { // Dictionary of files
-                    'dist/index.html': 'src/index.html', // 'destination': 'source'
+                files: {
+                    'dist/index.html': 'index.html',
                 }
             }
         },
@@ -26,7 +34,7 @@ module.exports = function(grunt) {
             },
             target: {
                 files: {
-                    'dist/css/style.css': ['src/css/style.css']
+                    'dist/css/style.css': ['css/style.css']
                 }
             }
         },
@@ -35,7 +43,7 @@ module.exports = function(grunt) {
         uglify: {
             my_target: {
                 files: {
-                    'dist/js/app.min.js': ['src/js/app.js']
+                    'dist/js/app.js': ['js/app.js']
                 }
             }
         },
@@ -55,6 +63,45 @@ module.exports = function(grunt) {
                     'node_modules/font-awesome/css/font-awesome.min.css'
                 ],
                 dest: 'dist/css/styles.css'
+            }
+        },
+
+        // Cocat Bower Components
+        bower_concat: {
+            all: {
+                dest: 'build/_bower.js',
+                cssDest: 'build/_bower.css',
+                exclude: [
+                    'jquery',
+                    'modernizr'
+                ],
+                dependencies: {
+                    'underscore': 'jquery',
+                    'backbone': 'underscore',
+                    'jquery-mousewheel': 'jquery'
+                },
+                bowerOptions: {
+                    relative: false
+                }
+            }
+        },
+
+
+        // Bower Simple Install
+        "bower-install-simple": {
+            options: {
+                color: true,
+                directory: "dist/bower_components"
+            },
+            "prod": {
+                options: {
+                    production: true
+                }
+            },
+            "dev": {
+                options: {
+                    production: false
+                }
             }
         },
 
@@ -85,13 +132,16 @@ module.exports = function(grunt) {
 
     });
 
+    // Load each task
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks("grunt-bower-install-simple");
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
 
     // Default tasks
-    grunt.registerTask('default', ['htmlmin', 'cssmin', 'uglify', 'connect']);
+    grunt.registerTask('default', ['copy', 'htmlmin', 'cssmin', 'uglify', 'bower-install-simple', 'connect']);
 };
