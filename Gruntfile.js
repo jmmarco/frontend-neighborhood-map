@@ -119,15 +119,19 @@ module.exports = function(grunt) {
 
         // Launch web server
         connect: {
-            server: {
+            options: {
+                keepalive: true,
+                port: 8000,
+                hostname: 'localhost',
+                open: 'index.html'
+            },
+            livereload: {
                 options: {
-                    keepalive: true,
-                    port: 8000,
-                    hostname: 'localhost',
-                    open: 'dist/index.html'
-                },
+                    open: {
+                        target: 'http://localhost:8000/dist/'
+                    }
+                }
             }
-
         }
 
     });
