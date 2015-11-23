@@ -312,7 +312,7 @@ var viewModel = function() {
                     for (var i = 0; i < articleList.length; i++) {
                         articleStr = articleList[i];
                         var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-                        wResults = '<li class="list-group-item"><a href="' + url + ' ' + 'target="_blank">' + articleStr + '</a></li>';
+                        wResults = '<li class="list-group-item"><a href="' + url + ' " ' + ' target="_blank">' + articleStr + '</a></li>';
                         $('#wikipedia').append(wResults);
                     }
                 } else {
