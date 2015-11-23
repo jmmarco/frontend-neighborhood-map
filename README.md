@@ -9,13 +9,17 @@ This returns the available venue information for a given location
 Returns a list of articles that closely match each venue
 
 Requirements:
-- Node
-- Grunt
+- [Node](https://nodejs.org/en/download/)
+- [npm](https://docs.npmjs.com/getting-started/installing-node)
 
+
+## Installation
+1. Clone the repository: `git clone repository_name.git`
+2. run: `npm install`
+This will install all the required dependencies automatically for you
 
 ## How to run:
-1. Clone the repository - `git clone repository_name.git`
-2. To run the project run `grunt default`, This will build the project and launch it automatically for you in your default Browser
+1. To run the project run `grunt default`, This will build the project and launch it automatically for you in your default Browser
 3. The application will open in a new window
 
 Tip: If you need to stop the server hit "CTRL + C"
@@ -25,6 +29,7 @@ grunt connect
 ```
 
 ### Dependencies:
+- Grunt
 - KnockoutJS
 - Google Maps API
 - jQuery
