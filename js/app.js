@@ -297,7 +297,7 @@ var viewModel = function() {
 
         // Make the AJAX request
         $.ajax({
-            timeout: 1000, // Cleaner way to handle timeouts. See http://stackoverflow.com/questions/3543683/determine-if-ajax-error-is-a-timeout
+            timeout: 5000, // Cleaner way to handle timeouts. See http://stackoverflow.com/questions/3543683/determine-if-ajax-error-is-a-timeout
             error: function() {
                 console.log("The request timed out");
                 $('#wikipedia').text("Failed to get Wikipedia resources");
