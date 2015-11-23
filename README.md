@@ -5,8 +5,11 @@ API's
 
 - Foursquare API
 This returns the available venue information for a given location
+The results can be visualized in a target Info Window
+
 - Wikipedia API
 Returns a list of articles that closely match each venue
+The results will appear as a floating box that is scrollable
 
 Requirements:
 - [Node](https://nodejs.org/en/download/)
