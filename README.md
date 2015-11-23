@@ -1,6 +1,9 @@
 # Neighborhood Map
 This is an application that helps you find local business and places in your local neighborhood
 
+Initially you will see all the favorite locations listed. You can use the search bar to look for a specific venue.
+Every time you highlight a venue, it will bounce on the map to help you pin point it's location.
+
 API's
 
 - Foursquare API
