@@ -304,24 +304,22 @@ var viewModel = function() {
             url: wikipediaURL,
             dataType: "jsonp",
             success: function(response) {
-                console.log(response);
                 var articleList = response[1];
-                console.log(articleList);
-                console.log(venue.name);
-
-
                 var articleStr;
-                for (var i = 0; i < articleList.length; i++) {
-                    articleStr = articleList[i];
-                    if (articleStr !== '') {
+                console.log(articleList.length);
+                if (articleList.length !== 0) {
+                    for (var i = 0; i < articleList.length; i++) {
+                        articleStr = articleList[i];
                         var url = 'http://en.wikipedia.org/wiki/' + articleStr;
                         wResults = '<li class="list-group-item"><a href="' + url + ' ' + 'target="_blank">' + articleStr + '</a></li>';
                         $('#wikipedia').append(wResults);
-                    } else {
-                        $('#wikipedia').append('No results available');
                     }
-
+                } else {
+                    console.log('ITS ALIVE');
+                    $('#wikipedia').append('<li class="list-group-item">No results available</li>');
                 }
+
+
             }
         });
 
