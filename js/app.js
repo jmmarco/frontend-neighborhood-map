@@ -211,6 +211,7 @@ var viewModel = function() {
             setTimeout(function() {
                 self.infoWindow.close();
                 self.map.setZoom(12);
+                self.map.panTo(mapOptions.center);
                 $('#wikipedia').empty(); // clear out current article from window
             }, 5000);
         })();
