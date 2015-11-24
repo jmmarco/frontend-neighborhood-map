@@ -117,7 +117,7 @@ var viewModel = function() {
             icon: iconBase + 'green-dot.png'
         },
         comedy: {
-            name: 'Comedy Clubs',
+            name: 'Comedy',
             icon: iconBase + 'purple-dot.png'
         }
     };
@@ -238,8 +238,16 @@ var viewModel = function() {
             box += '<img id="foursquare" src="images/foursquare-wordmark.png" alt="foursqaure logo">';
             box += '<h6>' + '<i class="fa fa-map-marker fa-lg"></i>' + '  ' + details[1] + '</h6>';
             box += '<h6>' + '<i class="fa fa-phone fa-lg"></i>' + '  ' + details[2] + '</h6>';
-            box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + details[3] + '</h6>';
-            box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + details[4] + '</h6>';
+            if (details[3] === 'Not provided') {
+                box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + details[3] + '</h6>';
+            } else {
+                box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + '<a href="' + details[3] +'" target="_blank">'+ details[3] + '</a>' +'</h6>';
+            }
+            if (details[4] === 'Not provided') {
+                box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + details[4] +'</h6>';
+            } else {
+                box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + '<a href="http://www.twitter.com/' + details[4] +'" target="_blank">'+ details[4] + '</a>' +'</h6>';
+            }
             box += '</div>';
         } else {
             box = box = '<div id="box">';
