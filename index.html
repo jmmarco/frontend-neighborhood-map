@@ -17,25 +17,24 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <div class="search">
                 <form class="form" role="search">
                     <div class="form-group">
-                        <input class="form-control" data-bind="textInput: userInput, event: {keyup: filterMarkers}" autocomplete="off" type="search" placeholder="Search...">
+                        <input class="form-control" data-bind="textInput: userInput, event: {keyup: filterMarkers}" autocomplete="off" type="search" placeholder="Search for a venue..">
                     </div>
                 </form>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2">
-                <ul class="list-group fixed" data-bind="foreach: visibleVenues">
-                    <li class="list-group-item" data-bind="text: name"></li>
+            <div>
+                <ul class="list-group venue" data-bind="foreach: visibleVenues">
+                    <li class="list-group-item" data-bind="text: name, click: $parent.clickHandler"></li>
                 </ul>
-                <ul class="list-group fixed" id="wikipedia">
-                    
+                <ul class="list-group" id="wikipedia">
 
                 </ul>
             </div>
-            <div class="col-md-10">
+            <div>
                 <div id="map"></div>
                 <div id="legend">My map legend</div>
             </div>
