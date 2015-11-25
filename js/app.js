@@ -26,13 +26,13 @@ var locationData = [{
     type: 'food'
 }, {
     name: 'Asuka Sushi',
-    tag: 'sushi',
+    tag: 'food',
     lat: 40.745232,
     lng: -73.99894899999998,
     type: 'food'
 }, {
     name: 'Joe\'s Pizza',
-    tag: 'pizza',
+    tag: 'food',
     lat: 40.730559,
     lng: -74.00216799999998,
     type: 'food'
