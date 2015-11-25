@@ -359,11 +359,11 @@ var viewModel = function() {
                     for (var i = 0; i < results.length; i++) {
 
                         // Make names lowercase
-                        orignalName = venue.name.toLowerCase();
+                        originalName = venue.name.toLowerCase();
                         foursquareName = results[i].name.toLowerCase();
 
                         // Venue validation
-                        if (foursquareName === orignalName) {
+                        if (foursquareName === originalName) {
                             name = results[i].name;
                             venue.url = results[i].url;
                             venue.phone = results[i].contact.formattedPhone;
