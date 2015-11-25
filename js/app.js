@@ -94,8 +94,8 @@ var viewModel = function() {
     var mapOptions = {
         zoom: 12,
         center: {
-            lat: 40.7236458,
-            lng: -73.9500978
+            lat: 40.7236538,
+            lng: -73.9595663
         },
         disableDefaultUI: true,
         scaleControl: false
@@ -147,8 +147,10 @@ var viewModel = function() {
     // Zoom out when Info Window is closed
     self.infoWindow.addListener('closeclick', function() {
         self.map.setZoom(12);
-    });
+        self.map.panTo(mapOptions.center);
+        $('#wikipedia').empty();
 
+    });
 
     // Create an array to hold each venue
     self.allLocations = [];
@@ -176,11 +178,15 @@ var viewModel = function() {
         venue.marker.addListener('click', function() {
             self.clickHandler(venue);
         });
+
     });
 
 
     // Create a click handler function (helps keep things clean)
     self.clickHandler = function(venue) {
+
+        // Clear the wikipedia entry from DOM
+        $('#wikipedia').empty();
 
         // Zoom in a bit
         self.map.setZoom(16);
@@ -207,13 +213,6 @@ var viewModel = function() {
                     venue.marker.setAnimation(null);
                 }, 700); // Default timeout that Google Maps uses for it's markers
             }
-            // Close Info Window Automatically after 5 seconds // UX Note: This might be annoying for some users
-            setTimeout(function() {
-                self.infoWindow.close();
-                self.map.setZoom(12);
-                self.map.panTo(mapOptions.center);
-                $('#wikipedia').empty(); // clear out current article from window
-            }, 5000);
         })();
     };
 
@@ -241,12 +240,12 @@ var viewModel = function() {
             if (details[3] === 'Not provided') {
                 box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + details[3] + '</h6>';
             } else {
-                box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + '<a href="' + details[3] +'" target="_blank">'+ details[3] + '</a>' +'</h6>';
+                box += '<h6>' + '<i class="fa fa-home fa-lg"></i></i>' + '  ' + '<a href="' + details[3] + '" target="_blank">' + details[3] + '</a>' + '</h6>';
             }
             if (details[4] === 'Not provided') {
-                box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + details[4] +'</h6>';
+                box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + details[4] + '</h6>';
             } else {
-                box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + '<a href="http://www.twitter.com/' + details[4] +'" target="_blank">'+ details[4] + '</a>' +'</h6>';
+                box += '<h6>' + '<i class="fa fa-twitter fa-lg"></i>' + '  ' + '<a href="http://www.twitter.com/' + details[4] + '" target="_blank">' + details[4] + '</a>' + '</h6>';
             }
             box += '</div>';
         } else {
@@ -315,7 +314,6 @@ var viewModel = function() {
             success: function(response) {
                 var articleList = response[1];
                 var articleStr;
-                console.log(articleList.length);
                 if (articleList.length !== 0) {
                     for (var i = 0; i < articleList.length; i++) {
                         articleStr = articleList[i];
@@ -324,7 +322,6 @@ var viewModel = function() {
                         $('#wikipedia').append(wResults);
                     }
                 } else {
-                    console.log('ITS ALIVE');
                     $('#wikipedia').append('<li class="list-group-item">No results available</li>');
                 }
 
