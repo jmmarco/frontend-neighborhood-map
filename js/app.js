@@ -126,14 +126,39 @@ function initMap() {
         }
 
         // Display popover tip
-        $(document).ready(function(){
+        $(document).ready(function() {
             $('[data-toggle="popover"]').popover();
+        });
+
+
+        $('input').popover({
+            title: 'Search hint:',
+            content: 'Search by typing the name of a venue or a keyword like: "food" or "park"',
+            placement: 'bottom',
+            html: true,
+            trigger: 'hover', //<--- you need a trigger other than manual
+            delay: {
+                show: "100",
+                hide: "2500"
+            }
         });
 
         $('input').on('shown.bs.popover', function() {
             setTimeout(function() {
                 $('input').popover('hide');
-            }, 1000);
+            }, 2500);
+        });
+
+        $('#legend').popover({
+            title: 'Venue Type',
+            content: 'These are the types of venues you can search for',
+            placement: 'bottom',
+            html: true,
+            trigger: 'hover', //<--- you need a trigger other than manual
+            delay: {
+                show: "100",
+                hide: "2500"
+            }
         });
 
 
@@ -279,7 +304,7 @@ function initMap() {
             self.allLocations.forEach(function(venue) {
                 venue.marker.setVisible(false);
 
-                if ( (venue.name.toLowerCase().indexOf(searchInput) !== -1) || (venue.type.toLowerCase().indexOf(searchInput) !== -1) )   {
+                if ((venue.name.toLowerCase().indexOf(searchInput) !== -1) || (venue.type.toLowerCase().indexOf(searchInput) !== -1)) {
                     $('input').popover('hide');
                     self.visibleVenues.push(venue);
                     venue.marker.setAnimation(google.maps.Animation.BOUNCE);
