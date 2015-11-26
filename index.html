@@ -20,9 +20,7 @@
             <div class="search">
                 <form class="form" role="search">
                     <div class="form-group">
-                        <input class="form-control" data-toggle="popover" title="Hint:"
-                        data-content="Search by typing the name of a venue or a keyword like: 'food'"
-                        data-placement="bottom" data-trigger="focus" data-bind="textInput: userInput, event: {keyup: filterMarkers}"
+                        <input class="form-control" data-bind="textInput: userInput, event: {keyup: filterMarkers}"
                         autocomplete="off" type="search" placeholder="Search for a venue..">
                     </div>
                 </form>
@@ -39,7 +37,7 @@
             </div>
             <div>
                 <div id="map"></div>
-                <div id="legend">My map legend</div>
+                <div id="legend"></div>
             </div>
 
         </div>
